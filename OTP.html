@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FCF8F2 0%, #F5E6D3 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            border: 1px solid #E8D4C8;
+            padding: 50px 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .login-card:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3A3330;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #8B7B77;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #3A3330;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            padding: 12px 15px;
+            width: 100%;
+            border: 1.5px solid #E8D4C8;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: 'Segoe UI', sans-serif;
+            color: #3A3330;
+            background-color: #FAFAF8;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: #B8A89D;
+        }
+
+        .form-input:hover {
+            border-color: #D4B5A0;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #BE8282;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(190, 130, 130, 0.1);
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: #8B7B77;
+        }
+
+        .resend-link a {
+            color: #BE8282;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .resend-link a:hover {
+            color: #A0636B;
+            text-decoration: underline;
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, #BE8282 0%, #A0636B 100%);
+            color: #FFFFFF;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #A0636B 0%, #8B5559 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(190, 130, 130, 0.3);
+        }
+
+        .login-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-link a {
+            display: inline-block;
+            color: #BE8282;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 12px 24px;
+            border: 2px solid #BE8282;
+            border-radius: 6px;
+            background-color: transparent;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link a:hover {
+            color: #FFFFFF;
+            background-color: #BE8282;
+            border-color: #BE8282;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(190, 130, 130, 0.3);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 40px 24px;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Verify OTP</h1>
+                <p class="login-subtitle">Enter the OTP sent to your phone</p>
+            </div>
+
+            <form id="otpForm">
+                <div class="form-group">
+                    <label class="form-label" for="otp">OTP Code</label>
+                    <input
+                        type="text"
+                        id="otp"
+                        name="otp"
+                        placeholder="0000"
+                        pattern="[0-9]{4}"
+                        maxlength="4"
+                        minlength="4"
+                        class="form-input"
+                        required
+                        aria-label="OTP code"
+                    >
+                </div>
+
+                <div class="resend-link">
+                    Didn't receive OTP? <a href="#">Resend</a>
+                </div>
+
+                <button type="button" class="login-button" onclick="window.location.href='index.html'">
+                    VERIFY
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="login.html">Back to Login</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

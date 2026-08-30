@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -101,7 +100,8 @@
       display: none;
     }
     .nav-tabs{
-      scrollbar-width:none;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     .nav-tabs a{
       flex:0 0 auto;
@@ -132,7 +132,7 @@
     /* Sidebar layout */
     .sidebar {
       position: fixed;
-      z-index: 5;
+      z-index: 10;
       width: 250px;
       top: 24px;
       left: 24px;
@@ -145,6 +145,7 @@
         width 0.35s ease,
         background 0.3s,
         box-shadow 0.3s;
+        margin-left:80px;
     }
 
     .sidebar.collapsed {
@@ -407,6 +408,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.12);
             display: grid;
             place-items: center;
+            -webkit-backdrop-filter: blur(1px);
             backdrop-filter: blur(1px);
         }
         .card:hover .card-image .star-icon{
@@ -596,8 +598,8 @@
             justify-content: center;
             padding: 0;
             box-sizing: border-box;
-            appearance: none;
             -webkit-appearance: none;
+            appearance: none;
             flex: 0 0 auto;
         }
         .card .card-content .quantity-control .qty-btn:hover{
@@ -684,6 +686,12 @@
         .search-box::placeholder {
             color: #8b7b77;
             font-size: 12px;
+        }
+
+        .collapse-btn i {
+            color: #ffffff;
+            width: 24px;
+            height: 24px;
         }
   </style>
 </head>

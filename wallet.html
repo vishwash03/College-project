@@ -146,6 +146,7 @@
         width 0.35s ease,
         background 0.3s,
         box-shadow 0.3s;
+        margin-left:80px;
     }
 
     .sidebar.collapsed {
@@ -650,6 +651,338 @@
                 45deg,#a0636b,#8b5563
             );
         }
+
+    /* Wallet Page Styles */
+    .wallet-section {
+      margin-bottom: 32px;
+    }
+
+    /* Balance Card */
+    .balance-card {
+      background: linear-gradient(135deg, #be8282 0%, #a0636b 100%);
+      border-radius: 16px;
+      padding: 32px 24px;
+      color: #ffffff;
+      box-shadow: 0 8px 32px rgba(190, 130, 130, 0.3);
+      margin-bottom: 24px;
+    }
+
+    .balance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .balance-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .balance-amount {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .balance-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 16px;
+    }
+
+    .last-updated {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Wallet Action Buttons */
+    .wallet-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 12px;
+      background: #ffffff;
+      border: 2px solid #e8d4c8;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #3a3330;
+      transition: all 0.3s ease;
+      min-height: 100px;
+    }
+
+    .action-btn:hover {
+      background: #f9f5f1;
+      border-color: #be8282;
+      box-shadow: 0 4px 12px rgba(190, 130, 130, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .action-btn i {
+      color: #be8282;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e8d4c8;
+    }
+
+    .section-header h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: #3a3330;
+    }
+
+    .view-all,
+    .add-method-btn {
+      color: #be8282;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .view-all:hover,
+    .add-method-btn:hover {
+      color: #a0636b;
+    }
+
+    /* Transactions Section */
+    .transactions-section {
+      background: #ffffff;
+      border: 1px solid #e8d4c8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .transactions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: #fcf9f5;
+      border-radius: 12px;
+      border: 1px solid #e8d4c8;
+      transition: all 0.2s ease;
+    }
+
+    .transaction-item:hover {
+      background: #faf6f1;
+      border-color: #d4bfb5;
+    }
+
+    .transaction-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      color: #ffffff;
+    }
+
+    .transaction-icon.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .transaction-icon.debit {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .transaction-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex: 1;
+      gap: 16px;
+    }
+
+    .transaction-description h4 {
+      margin: 0 0 4px 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #3a3330;
+    }
+
+    .transaction-description .transaction-meta {
+      margin: 0;
+      font-size: 13px;
+      color: #8b7b77;
+    }
+
+    .transaction-amount {
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .transaction-amount.success {
+      color: #2e7d32;
+    }
+
+    .transaction-amount.debit {
+      color: #c62828;
+    }
+
+    .transaction-time {
+      font-size: 12px;
+      color: #8b7b77;
+      white-space: nowrap;
+    }
+
+    /* Payment Methods Section */
+    .payment-methods-section {
+      background: #ffffff;
+      border: 1px solid #e8d4c8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .payment-methods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .payment-method-card {
+      background: linear-gradient(135deg, #f5e6d3 0%, #fcf8f2 100%);
+      border: 2px solid #e8d4c8;
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .payment-method-card:hover {
+      border-color: #be8282;
+      box-shadow: 0 8px 24px rgba(190, 130, 130, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .card-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      color: #3a3330;
+    }
+
+    .card-brand i {
+      color: #be8282;
+    }
+
+    .card-number {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3a3330;
+      margin: 0 0 16px 0;
+      letter-spacing: 2px;
+    }
+
+    .card-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #8b7b77;
+    }
+
+    .card-holder {
+      font-weight: 600;
+    }
+
+    .default-badge {
+      display: inline-block;
+      background: #4caf50;
+      color: #ffffff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .card-action-btn {
+      width: 100%;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid #e8d4c8;
+      border-radius: 8px;
+      color: #be8282;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .card-action-btn:hover {
+      background: #be8282;
+      border-color: #be8282;
+      color: #ffffff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .wallet-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .transaction-details {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .transaction-time {
+        align-self: flex-start;
+      }
+
+      .balance-amount {
+        font-size: 36px;
+      }
+
+      .payment-methods-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -743,382 +1076,19 @@
         </nav>
       </div>
 
-      <div class="products-container">
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Cloth product">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Premium Cloth</h3>
-            <div class="price-section">
-              <span class="price-sale">₹400</span>
-              <span class="price-original">₹600</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹200 OFF</span>
-            </div>
-            <span class="brand-badge">TrendStyle</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.5★</span>
-              <span class="review-count">(2.3k)</span>
-            </div>
-            <p class="product-size">200ml / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Casual Wear</h3>
-            <div class="price-section">
-              <span class="price-sale">₹350</span>
-              <span class="price-original">₹500</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹150 OFF</span>
-            </div>
-            <span class="brand-badge">ComfortFit</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.2★</span>
-              <span class="review-count">(1.8k)</span>
-            </div>
-            <p class="product-size">250ml / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Formal Shirt</h3>
-            <div class="price-section">
-              <span class="price-sale">₹500</span>
-              <span class="price-original">₹750</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹250 OFF</span>
-            </div>
-            <span class="brand-badge">ClassicFormal</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.7★</span>
-              <span class="review-count">(3.1k)</span>
-            </div>
-            <p class="product-size">180g / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Sports Outfit</h3>
-            <div class="price-section">
-              <span class="price-sale">₹450</span>
-              <span class="price-original">₹700</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹250 OFF</span>
-            </div>
-            <span class="brand-badge">ActiveWear</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.4★</span>
-              <span class="review-count">(2.5k)</span>
-            </div>
-            <p class="product-size">220ml / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Summer Dress</h3>
-            <div class="price-section">
-              <span class="price-sale">₹380</span>
-              <span class="price-original">₹550</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹170 OFF</span>
-            </div>
-            <span class="brand-badge">SummerVibes</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.3★</span>
-              <span class="review-count">(1.9k)</span>
-            </div>
-            <p class="product-size">150g / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Winter Jacket</h3>
-            <div class="price-section">
-              <span class="price-sale">₹600</span>
-              <span class="price-original">₹900</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹300 OFF</span>
-            </div>
-            <span class="brand-badge">WinterPro</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.6★</span>
-              <span class="review-count">(2.7k)</span>
-            </div>
-            <p class="product-size">280g / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-      </div>
-      <h4 style="color:black; text-decoration: underline; font-size: medium;">SAREE</h4>
-      <div class="products-container">
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Cloth product">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Premium Cloth</h3>
-            <div class="price-section">
-              <span class="price-sale">₹400</span>
-              <span class="price-original">₹600</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹200 OFF</span>
-            </div>
-            <span class="brand-badge">TrendStyle</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.5★</span>
-              <span class="review-count">(2.3k)</span>
-            </div>
-            <p class="product-size">200ml / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Casual Wear</h3>
-            <div class="price-section">
-              <span class="price-sale">₹350</span>
-              <span class="price-original">₹500</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹150 OFF</span>
-            </div>
-            <span class="brand-badge">ComfortFit</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.2★</span>
-              <span class="review-count">(1.8k)</span>
-            </div>
-            <p class="product-size">250ml / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Formal Shirt</h3>
-            <div class="price-section">
-              <span class="price-sale">₹500</span>
-              <span class="price-original">₹750</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹250 OFF</span>
-            </div>
-            <span class="brand-badge">ClassicFormal</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.7★</span>
-              <span class="review-count">(3.1k)</span>
-            </div>
-            <p class="product-size">180g / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Sports Outfit</h3>
-            <div class="price-section">
-              <span class="price-sale">₹450</span>
-              <span class="price-original">₹700</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹250 OFF</span>
-            </div>
-            <span class="brand-badge">ActiveWear</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.4★</span>
-              <span class="review-count">(2.5k)</span>
-            </div>
-            <p class="product-size">220ml / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Summer Dress</h3>
-            <div class="price-section">
-              <span class="price-sale">₹380</span>
-              <span class="price-original">₹550</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹170 OFF</span>
-            </div>
-            <span class="brand-badge">SummerVibes</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.3★</span>
-              <span class="review-count">(1.9k)</span>
-            </div>
-            <p class="product-size">150g / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-image">
-            <img src="/image/p1.jpeg" alt="Product image">
-            <button class="star-icon" title="Add to wishlist">
-              <i data-lucide="heart" style="width: 16px; height: 16px;"></i>
-            </button>
-          </div>
-          <div class="card-content">
-            <h3>Winter Jacket</h3>
-            <div class="price-section">
-              <span class="price-sale">₹600</span>
-              <span class="price-original">₹900</span>
-            </div>
-            <div class="discount-badge-wrapper">
-              <span class="discount-badge">₹300 OFF</span>
-            </div>
-            <span class="brand-badge">WinterPro</span>
-            <div class="rating-section">
-              <span class="rating-badge">4.6★</span>
-              <span class="review-count">(2.7k)</span>
-            </div>
-            <p class="product-size">280g / Piece</p>
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus">−</button>
-              <span class="qty-display">1</span>
-              <button class="qty-btn qty-plus">+</button>
-            </div>
-            <button class="add-to-cart">Add to cart</button>
-          </div>
-        </div>
+      <!-- Wallet Balance Card -->
+      <div class="wallet-section">
       </div>
 
+      <!-- Recent Transactions -->
+      <div class="transactions-section">
+      </div>
+
+      <!-- Payment Methods Section -->
+      <div class="payment-methods-section">
+      </div>
+        </div>
+      </div>
     </div>
   </main>
   <script>
@@ -1169,63 +1139,24 @@
       window.location.href = "login.html";
     });
 
-    // Toggle wishlist state for product heart icon
-    document.querySelectorAll(".star-icon").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        btn.classList.toggle("active");
+    // Wallet page interactions
+    document.querySelectorAll(".action-btn").forEach((btn) => {
+      btn.addEventListener("click", function() {
+        const action = this.className.match(/\b(add-money|transfer|withdraw|request)\b-btn/)?.[1];
+        if (action) {
+          alert(`${action.charAt(0).toUpperCase() + action.slice(1)} feature will be available soon!`);
+        }
       });
     });
 
-    // Quantity selector behavior for each product card
-    document.querySelectorAll(".card").forEach((card) => {
-      const minusBtn = card.querySelector(".qty-minus");
-      const plusBtn = card.querySelector(".qty-plus");
-      const qtyDisplay = card.querySelector(".qty-display");
-      const addToCartBtn = card.querySelector(".add-to-cart");
-      const qtyControl = card.querySelector(".quantity-control");
-
-      // Click on "Add to cart" button
-      addToCartBtn.addEventListener("click", (e) => {
+    document.querySelectorAll(".card-action-btn").forEach((btn) => {
+      btn.addEventListener("click", function(e) {
         e.preventDefault();
-        e.stopPropagation();
-
-        if (!qtyControl.classList.contains("show")) {
-          // First click - show quantity control and hide button
-          qtyControl.classList.add("show");
-          addToCartBtn.classList.add("hidden");
-        } else {
-          // Second click - add to cart and reset
-          const quantity = qtyDisplay.textContent;
-          // Item added silently to cart
-          qtyControl.classList.remove("show");
-          addToCartBtn.classList.remove("hidden");
-          qtyDisplay.textContent = "1";
+        if (this.textContent.trim() === "Remove") {
+          this.parentElement.style.opacity = "0.5";
+          this.textContent = "Removed";
+          this.disabled = true;
         }
-      });
-
-      minusBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        let qty = parseInt(qtyDisplay.textContent);
-        if (qty > 1) {
-          qty--;
-          qtyDisplay.textContent = qty;
-        } else if (qty === 1) {
-          // When quantity reaches 1 and minus is clicked, hide quantity control and show button
-          qtyControl.classList.remove("show");
-          addToCartBtn.classList.remove("hidden");
-          qtyDisplay.textContent = "1";
-        }
-      });
-
-      plusBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        let qty = parseInt(qtyDisplay.textContent);
-        qty++;
-        qtyDisplay.textContent = qty;
       });
     });
 

@@ -1,0 +1,340 @@
+.products-container {
+  display: flex;
+  width: min(100%, 1240px);
+  gap: 8px;
+  margin: 22px auto 32px;
+  padding: 0 0 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+}
+
+.products-container::-webkit-scrollbar {
+  display: none;
+}
+
+.content > .section-title {
+  width: min(100%, 1240px);
+  margin: 28px auto 12px;
+  padding-bottom: 6px;
+  color: #3a3330;
+  border-bottom: 1px solid #e8d4c8;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card {
+  display: flex;
+  flex: 0 0 148px;
+  width: 148px;
+  min-width: 148px;
+  flex-direction: column;
+  padding: 6px;
+  overflow: hidden;
+  background: #fffdfb;
+  border: 1px solid #eadbd0;
+  border-radius: 10px;
+  box-shadow: none;
+  transition: none;
+  scroll-snap-align: start;
+}
+
+.card:hover {
+  transform: none;
+  background: #fffdfb;
+  border-color: #eadbd0;
+  box-shadow: none;
+}
+
+.card .card-image {
+  position: relative;
+  width: 100%;
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8eee5 0%, #f2e0d0 100%);
+  border: 1px solid #efe2d8;
+  border-radius: 7px;
+}
+
+.card .card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: none;
+}
+
+.card:hover .card-image img {
+  transform: none;
+}
+
+.card .card-image .star-icon {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  color: #765b57;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #eadbd0;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.card:hover .card-image .star-icon {
+  color: #765b57;
+  background: #fff;
+  border-color: #eadbd0;
+}
+
+.card:hover .card-image .star-icon.active {
+  color: #d83f52;
+}
+
+.card .card-image .star-icon:focus-visible,
+.card .card-content button:focus-visible {
+  outline: 3px solid #d6a6a5;
+  outline-offset: 2px;
+}
+
+.card .card-image .star-icon.active {
+  color: #d83f52;
+}
+
+.card .card-image .star-icon.active svg {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.card .card-image .star-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.card .card-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  align-items: start;
+  gap: 5px 6px;
+  min-width: 0;
+  flex: 1;
+  padding: 7px 1px 1px;
+}
+
+.card .card-content > * {
+  min-width: 0;
+}
+
+.card .card-content h3 {
+  grid-column: 1;
+  min-width: 0;
+  min-height: 2.4em;
+  margin: 0;
+  overflow: hidden;
+  color: #3a3330;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.card .card-content .price-section {
+  display: flex;
+  grid-column: 2;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 3px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  text-align: right;
+}
+
+.card .card-content .price-sale {
+  color: #3a3330;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.card .card-content .price-original {
+  color: #8b7b77;
+  font-size: 9px;
+}
+
+.discount-badge-wrapper,
+.card .card-content .brand-badge,
+.card .card-content .rating-section,
+.card .card-content .product-size,
+.card .card-content .quantity-control,
+.card .card-content .add-to-cart {
+  grid-column: 1 / -1;
+}
+
+.discount-badge-wrapper {
+  min-height: 15px;
+  margin: 0;
+}
+
+.discount-badge {
+  padding: 2px 5px;
+  color: #287342;
+  background: #eaf6ec;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.card .card-content .brand-badge {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 3px 6px;
+  overflow: hidden;
+  color: #496783;
+  background: #edf4fa;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card .card-content .rating-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 0;
+  margin: 0;
+}
+
+.card .card-content .rating-badge {
+  gap: 3px;
+  padding: 2px 5px;
+  background: #418b55;
+  border-radius: 5px;
+  font-size: 9px;
+}
+
+.card .card-content .review-count {
+  color: #80736f;
+  font-size: 9px;
+}
+
+.card .card-content .product-size {
+  min-height: 0;
+  margin: 0;
+  color: #80736f;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.card .card-content .quantity-control {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 30px;
+  margin: 0;
+  padding: 3px 8px;
+  background: #faf5f1;
+  border-color: #eadbd0;
+  border-radius: 999px;
+}
+
+.card .card-content .quantity-control.show {
+  display: flex;
+}
+
+.card .card-content .quantity-control .qty-btn {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #fff;
+  background: #be8282;
+  border: 0;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 0.8;
+  cursor: pointer;
+  appearance: none;
+}
+
+.card .card-content .quantity-control .qty-display {
+  flex: 0 0 auto;
+  min-width: 20px;
+  color: #3a3330;
+  font-weight: 600;
+  text-align: center;
+}
+
+.card .card-content .add-to-cart {
+  width: 100%;
+}
+
+.card .card-content .quantity-control .qty-btn {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+}
+
+.card .card-content .quantity-control .qty-btn:hover {
+  transform: none;
+  background: #be8282;
+}
+
+.card .card-content .quantity-control .qty-display {
+  min-width: 20px;
+  font-size: 11px;
+}
+
+.card .card-content .add-to-cart {
+  height: 30px;
+  margin: 0;
+  padding: 0 8px;
+  color: #fff;
+  background: #a96770;
+  border: 0;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.card .card-content .add-to-cart:hover,
+.card .card-content button:hover {
+  transform: none;
+}
+
+.card .card-content .add-to-cart:hover {
+  background: #a96770;
+}
+
+.card .card-content button.hidden {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .products-container {
+    gap: 8px;
+    margin-top: 18px;
+  }
+}

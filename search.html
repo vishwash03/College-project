@@ -1,15 +1,15 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sidebars</title>
-  <link rel="stylesheet" href="styles.css" />
    <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     /* Global reset and page background */
     :root {
+      --content-offset: 112px;
       --header-top: 24px;
       --header-height: 134px;
       --header-clearance: 12px;
@@ -26,7 +26,6 @@
       display: flex;
       align-items: flex-start;
       justify-content: flex-start;
-      padding-left: 24px;
       background: linear-gradient(135deg, #fcf8f2 0%, #f5e6d3 100%);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       color: #3a3330;
@@ -35,36 +34,42 @@
 
     /* Main page area */
     .main-content {
-      width: 100%;
+      position: relative;
+      z-index: 0;
+      width: calc(100% - var(--content-offset));
+      margin-left: var(--content-offset);
       min-height: 100vh;
-      padding: 150px 40px 32px;
+      padding: 150px 0 32px;
     }
 
     .content {
-      max-width: 1100px;
-      margin: 0 auto;
+      width: 100%;
     }
 
     /* Top page header */
     .header {
       position: fixed;
       top: var(--header-top);
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 4;
+      left: var(--content-offset);
+      transform: none;
+      z-index: 1000;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 72px;
       height: var(--header-height);
-      width: calc(100% - 80px);
-      max-width: 1100px;
+      width: calc(100vw - var(--content-offset) - 24px);
+      max-width: none;
       padding: 4px 24px;
       background: #ffffff;
+      isolation: isolate;
       border: 1px solid #e8d4c8;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    body:has(.sidebar:not(.collapsed)) {
+      --content-offset: 298px;
     }
 
     .header h1 {
@@ -95,37 +100,43 @@
       flex-wrap: nowrap;
       gap: 8px;
       width: 100%;
-      height: auto;
+      height: 40px;
       min-height: 40px;
+      flex: 0 0 40px;
       overflow-x: auto;
-      overflow-y: visible;
-      white-space: nowrap;
+      overflow-y: hidden;
+      padding: 0 4px;
       scroll-behavior: smooth;
-      outline: 1px solid #e8d4c8;
-      outline-offset: 0;
+      border: 1px solid #e8d4c8;
       border-radius: 8px;
-      transform: translateY(4px);
+      scrollbar-width: thin;
+      scrollbar-color: #be8282 #f5e6d3;
     }
-    .nav-tabs::-webkit-scrollbar{
-      display: none;
+
+    .nav-tabs::-webkit-scrollbar {
+      height: 6px;
     }
-    .nav-tabs{
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+
+    .nav-tabs::-webkit-scrollbar-track {
+      background: #f5e6d3;
+      border-radius: 999px;
     }
-    .nav-tabs a{
-      flex:0 0 auto;
-      white-space: nowrap;
+
+    .nav-tabs::-webkit-scrollbar-thumb {
+      background: #be8282;
+      border-radius: 999px;
     }
 
     .nav-tabs a {
+      flex: 0 0 auto;
       padding: 6px 10px;
-      border-right: 2px solid #e8d4c8;
+      border-right: 1px solid #e8d4c8;
       border-radius: 8px;
       color: #8b7b77;
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
+      white-space: nowrap;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -137,6 +148,11 @@
 
     .nav-tabs a:last-child {
       border-right: 0;
+    }
+
+    .nav-tabs a:focus-visible {
+      outline: 2px solid #8b5563;
+      outline-offset: -2px;
     }
 
     /* Sidebar layout */
@@ -155,7 +171,6 @@
         width 0.35s ease,
         background 0.3s,
         box-shadow 0.3s;
-        margin-left:80px;
     }
 
     .sidebar.collapsed {
@@ -320,6 +335,11 @@
       color: #ffffff;
       font-size: 14px;
       font-weight: 700;
+    }
+
+    .profile-avatar .lucide {
+      width: 18px;
+      height: 18px;
     }
 
     .sidebar.collapsed .profile-button {
@@ -705,7 +725,83 @@
             width: 24px;
             height: 24px;
         }
+
+    @media (max-width: 700px) {
+      :root {
+        --content-offset: 80px;
+        --header-top: 12px;
+      }
+
+      body:has(.sidebar:not(.collapsed)) {
+        --content-offset: 80px;
+      }
+
+      .sidebar,
+      .sidebar:not(.collapsed) {
+        top: 12px;
+        left: 12px;
+        width: 56px;
+        margin: 0;
+      }
+
+      .sidebar .nav button span,
+      .sidebar .profile-name {
+        display: none;
+      }
+
+      .sidebar .nav button,
+      .sidebar .profile-button {
+        justify-content: center;
+        padding: 0;
+      }
+
+      .main-content {
+        width: calc(100% - var(--content-offset));
+        margin-left: var(--content-offset);
+        padding: 150px 0 24px;
+      }
+
+      .header {
+        padding: 4px 10px;
+      }
+
+      .header h1 {
+        font-size: 22px;
+      }
+
+      .search-box {
+        width: min(100%, 240px);
+        min-width: 0;
+      }
+
+      .header .divider {
+        margin: 8px 0 6px;
+      }
+
+      .nav-tabs a {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      :root {
+        --content-offset: 68px;
+      }
+
+      body:has(.sidebar:not(.collapsed)) {
+        --content-offset: 68px;
+      }
+
+      .sidebar,
+      .sidebar:not(.collapsed) {
+        left: 8px;
+        width: 48px;
+      }
+    }
   </style>
+  <link rel="stylesheet" href="product-cards.css" />
+  <link rel="stylesheet" href="site-sidebar.css" />
 </head>
 
 <body>
@@ -766,7 +862,7 @@
 
       <div class="profile-section">
         <button type="button" class="profile-button" aria-label="Open profile" data-page="login.html">
-          <span class="profile-avatar">A</span>
+          <span class="profile-avatar"><i data-lucide="user-round" aria-hidden="true"></i></span>
           <span class="profile-name">Profile</span>
         </button>
       </div>
@@ -781,21 +877,15 @@
           <input type="text" class="search-box" placeholder="Search products..." />
         </div>
         <nav class="nav-tabs">
-          <a href="#" class="active">ðŸ›ï¸ All</a>
-          <a href="#">â˜• Cafe</a>
-          <a href="#">ðŸ  Home</a>
-          <a href="#">ðŸŽ® Toys</a>
-          <a href="#">ðŸ¥¬ Fresh</a>
-          <a href="#">ðŸŽ§ Electronics</a>
-          <a href="#">ðŸ“± Mobiles</a>
-          <a href="#">ðŸ’„ Beauty</a>
-          <a href="#">ðŸ‘— Fashion</a>
-          <a href="#">ðŸŽ® Toys</a>
-          <a href="#">ðŸ¥¬ Fresh</a>
-          <a href="#">Skincare</a>
-          <a href="#">Baby Product</a>
-          <a href="#">Special</a>
-          <a href="#">Men's</a>
+          <a href="index.html" class="active">🛍️ All</a>
+          <a href="cafe.html">☕ Cafe</a>
+          <a href="index.html">🏠 Home</a>
+          <a href="toys.html">🎮 Toys</a>
+          <a href="fresh.html">🥬 Fresh</a>
+          <a href="electronics.html">🎧 Electronics</a>
+          <a href="mobiles.html">📱 Mobiles</a>
+          <a href="beauty.html">💄 Beauty</a>
+          <a href="fashion.html">👗 Fashion</a>
         </nav>
       </div>
 
@@ -810,20 +900,20 @@
           <div class="card-content">
             <h3>Premium Cloth</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹400</span>
-              <span class="price-original">â‚¹600</span>
+              <span class="price-sale">₹400</span>
+              <span class="price-original">₹600</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹200 OFF</span>
+              <span class="discount-badge">₹200 OFF</span>
             </div>
             <span class="brand-badge">TrendStyle</span>
             <div class="rating-section">
-              <span class="rating-badge">4.5â˜…</span>
+              <span class="rating-badge">4.5★</span>
               <span class="review-count">(2.3k)</span>
             </div>
             <p class="product-size">200ml / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -841,20 +931,20 @@
           <div class="card-content">
             <h3>Casual Wear</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹350</span>
-              <span class="price-original">â‚¹500</span>
+              <span class="price-sale">₹350</span>
+              <span class="price-original">₹500</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹150 OFF</span>
+              <span class="discount-badge">₹150 OFF</span>
             </div>
             <span class="brand-badge">ComfortFit</span>
             <div class="rating-section">
-              <span class="rating-badge">4.2â˜…</span>
+              <span class="rating-badge">4.2★</span>
               <span class="review-count">(1.8k)</span>
             </div>
             <p class="product-size">250ml / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -872,20 +962,20 @@
           <div class="card-content">
             <h3>Formal Shirt</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹500</span>
-              <span class="price-original">â‚¹750</span>
+              <span class="price-sale">₹500</span>
+              <span class="price-original">₹750</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹250 OFF</span>
+              <span class="discount-badge">₹250 OFF</span>
             </div>
             <span class="brand-badge">ClassicFormal</span>
             <div class="rating-section">
-              <span class="rating-badge">4.7â˜…</span>
+              <span class="rating-badge">4.7★</span>
               <span class="review-count">(3.1k)</span>
             </div>
             <p class="product-size">180g / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -903,20 +993,20 @@
           <div class="card-content">
             <h3>Sports Outfit</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹450</span>
-              <span class="price-original">â‚¹700</span>
+              <span class="price-sale">₹450</span>
+              <span class="price-original">₹700</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹250 OFF</span>
+              <span class="discount-badge">₹250 OFF</span>
             </div>
             <span class="brand-badge">ActiveWear</span>
             <div class="rating-section">
-              <span class="rating-badge">4.4â˜…</span>
+              <span class="rating-badge">4.4★</span>
               <span class="review-count">(2.5k)</span>
             </div>
             <p class="product-size">220ml / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -934,20 +1024,20 @@
           <div class="card-content">
             <h3>Summer Dress</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹380</span>
-              <span class="price-original">â‚¹550</span>
+              <span class="price-sale">₹380</span>
+              <span class="price-original">₹550</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹170 OFF</span>
+              <span class="discount-badge">₹170 OFF</span>
             </div>
             <span class="brand-badge">SummerVibes</span>
             <div class="rating-section">
-              <span class="rating-badge">4.3â˜…</span>
+              <span class="rating-badge">4.3★</span>
               <span class="review-count">(1.9k)</span>
             </div>
             <p class="product-size">150g / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -965,20 +1055,20 @@
           <div class="card-content">
             <h3>Winter Jacket</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹600</span>
-              <span class="price-original">â‚¹900</span>
+              <span class="price-sale">₹600</span>
+              <span class="price-original">₹900</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹300 OFF</span>
+              <span class="discount-badge">₹300 OFF</span>
             </div>
             <span class="brand-badge">WinterPro</span>
             <div class="rating-section">
-              <span class="rating-badge">4.6â˜…</span>
+              <span class="rating-badge">4.6★</span>
               <span class="review-count">(2.7k)</span>
             </div>
             <p class="product-size">280g / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -986,7 +1076,7 @@
           </div>
         </div>
       </div>
-      <h4 style="color:black; text-decoration: underline; font-size: medium;">SAREE</h4>
+      <h2 class="section-title">Saree</h2>
       <div class="products-container">
         <div class="card">
           <div class="card-image">
@@ -998,20 +1088,20 @@
           <div class="card-content">
             <h3>Premium Cloth</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹400</span>
-              <span class="price-original">â‚¹600</span>
+              <span class="price-sale">₹400</span>
+              <span class="price-original">₹600</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹200 OFF</span>
+              <span class="discount-badge">₹200 OFF</span>
             </div>
             <span class="brand-badge">TrendStyle</span>
             <div class="rating-section">
-              <span class="rating-badge">4.5â˜…</span>
+              <span class="rating-badge">4.5★</span>
               <span class="review-count">(2.3k)</span>
             </div>
             <p class="product-size">200ml / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -1029,20 +1119,20 @@
           <div class="card-content">
             <h3>Casual Wear</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹350</span>
-              <span class="price-original">â‚¹500</span>
+              <span class="price-sale">₹350</span>
+              <span class="price-original">₹500</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹150 OFF</span>
+              <span class="discount-badge">₹150 OFF</span>
             </div>
             <span class="brand-badge">ComfortFit</span>
             <div class="rating-section">
-              <span class="rating-badge">4.2â˜…</span>
+              <span class="rating-badge">4.2★</span>
               <span class="review-count">(1.8k)</span>
             </div>
             <p class="product-size">250ml / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -1060,20 +1150,20 @@
           <div class="card-content">
             <h3>Formal Shirt</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹500</span>
-              <span class="price-original">â‚¹750</span>
+              <span class="price-sale">₹500</span>
+              <span class="price-original">₹750</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹250 OFF</span>
+              <span class="discount-badge">₹250 OFF</span>
             </div>
             <span class="brand-badge">ClassicFormal</span>
             <div class="rating-section">
-              <span class="rating-badge">4.7â˜…</span>
+              <span class="rating-badge">4.7★</span>
               <span class="review-count">(3.1k)</span>
             </div>
             <p class="product-size">180g / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -1091,20 +1181,20 @@
           <div class="card-content">
             <h3>Sports Outfit</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹450</span>
-              <span class="price-original">â‚¹700</span>
+              <span class="price-sale">₹450</span>
+              <span class="price-original">₹700</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹250 OFF</span>
+              <span class="discount-badge">₹250 OFF</span>
             </div>
             <span class="brand-badge">ActiveWear</span>
             <div class="rating-section">
-              <span class="rating-badge">4.4â˜…</span>
+              <span class="rating-badge">4.4★</span>
               <span class="review-count">(2.5k)</span>
             </div>
             <p class="product-size">220ml / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -1122,20 +1212,20 @@
           <div class="card-content">
             <h3>Summer Dress</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹380</span>
-              <span class="price-original">â‚¹550</span>
+              <span class="price-sale">₹380</span>
+              <span class="price-original">₹550</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹170 OFF</span>
+              <span class="discount-badge">₹170 OFF</span>
             </div>
             <span class="brand-badge">SummerVibes</span>
             <div class="rating-section">
-              <span class="rating-badge">4.3â˜…</span>
+              <span class="rating-badge">4.3★</span>
               <span class="review-count">(1.9k)</span>
             </div>
             <p class="product-size">150g / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -1153,20 +1243,20 @@
           <div class="card-content">
             <h3>Winter Jacket</h3>
             <div class="price-section">
-              <span class="price-sale">â‚¹600</span>
-              <span class="price-original">â‚¹900</span>
+              <span class="price-sale">₹600</span>
+              <span class="price-original">₹900</span>
             </div>
             <div class="discount-badge-wrapper">
-              <span class="discount-badge">â‚¹300 OFF</span>
+              <span class="discount-badge">₹300 OFF</span>
             </div>
             <span class="brand-badge">WinterPro</span>
             <div class="rating-section">
-              <span class="rating-badge">4.6â˜…</span>
+              <span class="rating-badge">4.6★</span>
               <span class="review-count">(2.7k)</span>
             </div>
             <p class="product-size">280g / Piece</p>
             <div class="quantity-control">
-              <button class="qty-btn qty-minus">âˆ’</button>
+              <button class="qty-btn qty-minus">−</button>
               <span class="qty-display">1</span>
               <button class="qty-btn qty-plus">+</button>
             </div>
@@ -1177,6 +1267,8 @@
 
     </div>
   </main>
+  <script src="cart-storage.js"></script>
+  <script src="additional-products.js"></script>
   <script>
     const sidebar = document.querySelector(".sidebar");
     const collapseBtn = document.getElementById("collapseBtn");
@@ -1234,60 +1326,80 @@
       });
     });
 
-    // Quantity selector behavior for each product card
+    function showCartError(error) {
+      console.error("Shopping cart update failed.", error);
+      window.alert(error.message);
+    }
+
     document.querySelectorAll(".card").forEach((card) => {
       const minusBtn = card.querySelector(".qty-minus");
       const plusBtn = card.querySelector(".qty-plus");
       const qtyDisplay = card.querySelector(".qty-display");
       const addToCartBtn = card.querySelector(".add-to-cart");
       const qtyControl = card.querySelector(".quantity-control");
+      const name = card.querySelector("h3").textContent.trim();
+      const storedItem = ShopCart.getItems().find((item) => item.name === name);
+      if (storedItem) {
+        qtyDisplay.textContent = String(storedItem.quantity);
+        qtyControl.classList.add("show");
+        addToCartBtn.classList.add("hidden");
+      }
 
-      // Click on "Add to cart" button
       addToCartBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!qtyControl.classList.contains("show")) {
-          // First click - show quantity control and hide button
+        try {
+          ShopCart.add({
+            name,
+            price: Number(card.querySelector(".price-sale").textContent.replace(/[^\d.]/g, "")),
+            image: card.querySelector(".card-image img").getAttribute("src"),
+            brand: card.querySelector(".brand-badge").textContent.trim(),
+            size: card.querySelector(".product-size").textContent.trim()
+          });
+          qtyDisplay.textContent = "1";
           qtyControl.classList.add("show");
           addToCartBtn.classList.add("hidden");
-        } else {
-          // Second click - add to cart and reset
-          const quantity = qtyDisplay.textContent;
-          // Item added silently to cart
-          qtyControl.classList.remove("show");
-          addToCartBtn.classList.remove("hidden");
-          qtyDisplay.textContent = "1";
+        } catch (error) {
+          showCartError(error);
         }
       });
 
       minusBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        let qty = parseInt(qtyDisplay.textContent);
-        if (qty > 1) {
-          qty--;
-          qtyDisplay.textContent = qty;
-        } else if (qty === 1) {
-          // When quantity reaches 1 and minus is clicked, hide quantity control and show button
+        try {
+          const quantity = Number(qtyDisplay.textContent) - 1;
+          ShopCart.setQuantity(name, quantity);
+          if (quantity < 1) {
           qtyControl.classList.remove("show");
           addToCartBtn.classList.remove("hidden");
           qtyDisplay.textContent = "1";
+          } else {
+            qtyDisplay.textContent = String(quantity);
+          }
+        } catch (error) {
+          showCartError(error);
         }
       });
 
       plusBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        let qty = parseInt(qtyDisplay.textContent);
-        qty++;
-        qtyDisplay.textContent = qty;
+        try {
+          const quantity = Number(qtyDisplay.textContent) + 1;
+          ShopCart.setQuantity(name, quantity);
+          qtyDisplay.textContent = String(quantity);
+        } catch (error) {
+          showCartError(error);
+        }
       });
     });
 
     // Initialize Lucide icons
     lucide.createIcons();
   </script>
+  <script src="site-sidebar.js"></script>
 </body>
 
 </html>

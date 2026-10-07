@@ -1,43 +1,488 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Code</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            background: linear-gradient(135deg, #fcf8f2 0%, #f5e6d3 100%);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Categories</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        .link-box {
-            background: #ffffff;
-            border: 1px solid #e8d4c8;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            padding: 24px 32px;
-            text-align: center;
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, #fcf8f2 0%, #f5e6d3 100%);
+      color: #3a3330;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        a {
-            color: #be8282;
-            font-size: 18px;
-            font-weight: 600;
-            text-decoration: none;
-        }
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 250px;
+      width: 250px;
+      height: calc(100vh - 48px);
+      min-height: 420px;
+      padding: 18px 8px;
+      background: #ffffff;
+      border: 1px solid #e8d4c8;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transition: width 0.35s ease, flex-basis 0.35s ease;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .sidebar.collapsed {
+      flex-basis: 64px;
+      width: 64px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 48px;
+      margin: 0 4px 16px;
+    }
+
+    .sidebar-title {
+      margin: 0 0 0 8px;
+      color: #8b5563;
+      font-size: 18px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .collapse-btn {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 11px;
+      background: #be8282;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .collapse-btn:hover {
+      background: #a0636b;
+    }
+
+    .collapse-btn .lucide {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      border-radius: 13px;
+      color: #3a3330;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: background 0.2s, padding 0.35s;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: #f1e4d3;
+    }
+
+    .sidebar-nav i {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      margin: 10px 4px 14px;
+      border: 0;
+      background: #e8d4c8;
+    }
+
+    .profile-section {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid #e8d4c8;
+    }
+
+    .profile-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      height: 48px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      color: #3a3330;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+
+    .profile-button:hover,
+    .sidebar.collapsed .profile-button:hover {
+      background: #f5e6d3;
+    }
+
+    .profile-avatar {
+      display: grid;
+      place-items: center;
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #be8282;
+      color: #ffffff;
+    }
+
+    .profile-avatar .lucide {
+      width: 18px;
+      height: 18px;
+    }
+
+    .sidebar.collapsed .profile-button {
+      justify-content: center;
+      padding: 0;
+    }
+
+    .sidebar.collapsed .profile-name {
+      display: none;
+    }
+
+    .sidebar.collapsed .sidebar-header {
+      justify-content: center;
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    .sidebar.collapsed .sidebar-title,
+    .sidebar.collapsed .sidebar-nav span {
+      display: none;
+    }
+
+    .sidebar.collapsed .sidebar-nav a {
+      justify-content: center;
+      padding: 0;
+    }
+
+    .sidebar.collapsed .sidebar-divider {
+      margin-right: 8px;
+      margin-left: 8px;
+    }
+
+    main {
+      flex: 1 1 auto;
+      min-width: 0;
+      width: min(100%, 1100px);
+      margin: 0 auto;
+    }
+
+    .explore-header {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 134px;
+      padding: 4px 24px;
+      background: #ffffff;
+      border: 1px solid #e8d4c8;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    h1 {
+      width: 100%;
+      margin: 0;
+      color: #3a3330;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .explore-title {
+      color: #3a3330;
+      text-decoration: none;
+    }
+
+    .github-link {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      flex: 0 0 auto;
+      padding: 6px 9px;
+      border: 1px solid #e8d4c8;
+      border-radius: 7px;
+      background: #f8f1e9;
+      color: #5c4d49;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .github-link:hover {
+      background: #f1e4d3;
+    }
+
+    .subtitle {
+      width: 100%;
+      margin: 2px 0 0;
+      color: #8b7b77;
+      text-align: center;
+    }
+
+    .header-divider {
+      width: 100%;
+      margin: 10px 0 6px;
+      border: 0;
+      border-top: 1px solid #e8d4c8;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      height: 40px;
+      min-height: 40px;
+      flex: 0 0 40px;
+      overflow-x: auto;
+      padding: 0 4px;
+      border: 1px solid #e8d4c8;
+      border-radius: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: #be8282 #f5e6d3;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .nav-tabs::-webkit-scrollbar-track {
+      background: #f5e6d3;
+      border-radius: 999px;
+    }
+
+    .nav-tabs::-webkit-scrollbar-thumb {
+      background: #be8282;
+      border-radius: 999px;
+    }
+
+    .nav-tabs a {
+      flex: 0 0 auto;
+      padding: 6px 10px;
+      border-right: 1px solid #e8d4c8;
+      border-radius: 8px;
+      color: #8b7b77;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-tabs a:hover,
+    .nav-tabs a.active {
+      background: #f1e4d3;
+      color: #3a3330;
+    }
+
+    .nav-tabs a:last-child {
+      border-right: 0;
+    }
+
+    .nav-tabs a:focus-visible {
+      outline: 2px solid #8b5563;
+      outline-offset: -2px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .sidebar,
+      .sidebar.collapsed {
+        position: sticky;
+        top: 12px;
+        flex: 0 0 56px;
+        width: 56px;
+        height: calc(100vh - 24px);
+        min-height: 0;
+        padding: 12px 5px;
+      }
+
+      main {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+        margin: 0;
+      }
+
+      .sidebar-header {
+        justify-content: center;
+        margin: 0 0 12px;
+      }
+
+      .sidebar-title,
+      .sidebar-nav span,
+      .profile-name {
+        display: none;
+      }
+
+      .sidebar-nav a {
+        justify-content: center;
+        height: 44px;
+        padding: 0;
+      }
+
+      .collapse-btn {
+        display: none;
+      }
+
+      .sidebar-divider {
+        margin: 8px 2px;
+      }
+
+      .explore-header {
+        width: calc(100vw - 104px);
+        height: 134px;
+        padding: 8px 10px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .github-link {
+        top: 8px;
+        right: 8px;
+        padding: 4px 6px;
+        font-size: 11px;
+      }
+
+      .subtitle {
+        font-size: 13px;
+      }
+
+      .nav-tabs {
+        height: 40px;
+        min-height: 40px;
+        flex-basis: 40px;
+      }
+
+      .nav-tabs a {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="site-sidebar.css">
 </head>
+
 <body>
-    <div class="link-box">
-        <a href="https://github.com/vishwash03" target="_blank" rel="noopener noreferrer">Open GitHub Code</a>
+  <aside class="sidebar collapsed" aria-label="Main navigation">
+    <header class="sidebar-header">
+      <div class="sidebar-title">Shop</div>
+      <button type="button" class="collapse-btn" id="collapseBtn" aria-label="Expand sidebar" aria-expanded="false">
+        <i data-lucide="panel-left-open" aria-hidden="true"></i>
+      </button>
+    </header>
+    <nav class="sidebar-nav">
+      <a href="index.html"><i data-lucide="home" aria-hidden="true"></i><span>Home</span></a>
+      <a href="search.html"><i data-lucide="search" aria-hidden="true"></i><span>Search</span></a>
+      <a href="categories.html" class="active" aria-current="page"><i data-lucide="compass" aria-hidden="true"></i><span>Explore</span></a>
+      <a href="cart.html"><i data-lucide="shopping-cart" aria-hidden="true"></i><span>Cart</span></a>
+      <a href="wallet.html"><i data-lucide="wallet" aria-hidden="true"></i><span>Wallet</span></a>
+    </nav>
+    <hr class="sidebar-divider" />
+    <nav class="sidebar-nav secondary">
+      <a href="help&amp;support.html"><i data-lucide="circle-help" aria-hidden="true"></i><span>Help &amp; Support</span></a>
+    </nav>
+    <div class="profile-section">
+      <a class="profile-button" href="login.html" aria-label="Open profile">
+        <span class="profile-avatar"><i data-lucide="user-round" aria-hidden="true"></i></span>
+        <span class="profile-name">Profile</span>
+      </a>
     </div>
+  </aside>
+  <main>
+    <header class="explore-header">
+      <a class="explore-title" href="index.html"><h1>Explore</h1></a>
+      <p class="subtitle">Browse shops and products by category</p>
+      <hr class="header-divider" />
+      <a class="github-link" href="https://github.com/vishwash03" target="_blank" rel="noopener noreferrer">
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+      <nav class="nav-tabs" aria-label="Explore categories">
+        <a href="categories.html" class="active" aria-current="page">🧭 Explore</a>
+        <a href="index.html">🛍️ All</a>
+        <a href="cafe.html">☕ Cafe</a>
+        <a href="index.html">🏠 Home</a>
+        <a href="toys.html">🎮 Toys</a>
+        <a href="fresh.html">🥬 Fresh</a>
+        <a href="electronics.html">🎧 Electronics</a>
+        <a href="mobiles.html">📱 Mobiles</a>
+        <a href="beauty.html">💄 Beauty</a>
+        <a href="fashion.html">👗 Fashion</a>
+      </nav>
+    </header>
+  </main>
+  <script>
+    lucide.createIcons();
+    const sidebar = document.querySelector(".sidebar");
+    const collapseBtn = document.getElementById("collapseBtn");
+
+    collapseBtn.addEventListener("click", () => {
+      const isCollapsed = sidebar.classList.toggle("collapsed");
+      collapseBtn.setAttribute("aria-expanded", String(!isCollapsed));
+      collapseBtn.setAttribute("aria-label", isCollapsed ? "Expand sidebar" : "Collapse sidebar");
+      collapseBtn.innerHTML = `<i data-lucide="${isCollapsed ? "panel-left-open" : "panel-left-close"}" aria-hidden="true"></i>`;
+      lucide.createIcons();
+    });
+  </script>
+  <script src="site-sidebar.js"></script>
 </body>
+
 </html>

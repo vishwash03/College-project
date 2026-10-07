@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sidebars</title>
-  <link rel="stylesheet" href="styles.css" />
    <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     /* Global reset and page background */
     :root {
-      --header-top: 18px;
+      --content-offset: 112px;
+      --header-top: 24px;
       --header-height: 134px;
       --header-clearance: 12px;
       scroll-padding-top: calc(var(--header-top) + var(--header-height) + var(--header-clearance));
@@ -27,7 +27,6 @@
       display: flex;
       align-items: flex-start;
       justify-content: flex-start;
-      padding-left: 24px;
       background: linear-gradient(135deg, #fcf8f2 0%, #f5e6d3 100%);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       color: #3a3330;
@@ -36,36 +35,39 @@
 
     /* Main page area */
     .main-content {
-      width: 100%;
+      width: calc(100% - var(--content-offset));
+      margin-left: var(--content-offset);
       min-height: 100vh;
-      padding: 150px 40px 32px;
+      padding: 150px 0 32px;
     }
 
     .content {
-      max-width: 1100px;
-      margin: 0 auto;
+      width: 100%;
     }
 
     /* Top page header */
     .header {
       position: fixed;
       top: var(--header-top);
-      left: 50%;
-      transform: translateX(-50%);
+      left: var(--content-offset);
+      transform: none;
       z-index: 4;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 72px;
       height: var(--header-height);
-      width: calc(100% - 80px);
-      max-width: 1100px;
+      width: calc(100vw - var(--content-offset) - 24px);
+      max-width: none;
       padding: 4px 24px;
       background: #ffffff;
       border: 1px solid #e8d4c8;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    body:has(.sidebar:not(.collapsed)) {
+      --content-offset: 298px;
     }
 
     .header h1 {
@@ -98,29 +100,35 @@
       flex-wrap: nowrap;
       gap: 8px;
       width: 100%;
-      height: auto;
+      height: 40px;
       min-height: 40px;
+      flex: 0 0 40px;
       overflow-x: auto;
-      overflow-y: visible;
-      white-space: nowrap;
+      overflow-y: hidden;
+      padding: 0 4px;
       scroll-behavior: smooth;
-      outline: 1px solid #e8d4c8;
-      outline-offset: 0;
+      border: 1px solid #e8d4c8;
       border-radius: 8px;
-      transform: translateY(4px);
+      scrollbar-width: thin;
+      scrollbar-color: #be8282 #f5e6d3;
     }
-    .nav-tabs::-webkit-scrollbar{
-      display: none;
+
+    .nav-tabs::-webkit-scrollbar {
+      height: 6px;
     }
-    .nav-tabs{
-      scrollbar-width:none;
+
+    .nav-tabs::-webkit-scrollbar-track {
+      background: #f5e6d3;
+      border-radius: 999px;
     }
-    .nav-tabs a{
-      flex:0 0 auto;
-      white-space: nowrap;
+
+    .nav-tabs::-webkit-scrollbar-thumb {
+      background: #be8282;
+      border-radius: 999px;
     }
 
     .nav-tabs a {
+      flex: 0 0 auto;
       padding: 6px 10px;
       border-right: 1px solid #e8d4c8;
       border-radius: 8px;
@@ -128,6 +136,7 @@
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
+      white-space: nowrap;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -139,6 +148,11 @@
 
     .nav-tabs a:last-child {
       border-right: 0;
+    }
+
+    .nav-tabs a:focus-visible {
+      outline: 2px solid #8b5563;
+      outline-offset: -2px;
     }
 
     /* Sidebar layout */
@@ -157,7 +171,6 @@
         width 0.35s ease,
         background 0.3s,
         box-shadow 0.3s;
-        margin-left:80px;
     }
 
     .sidebar.collapsed {
@@ -322,6 +335,11 @@
       color: #ffffff;
       font-size: 14px;
       font-weight: 700;
+    }
+
+    .profile-avatar .lucide {
+      width: 18px;
+      height: 18px;
     }
 
     .sidebar.collapsed .profile-button {
@@ -663,338 +681,333 @@
             );
         }
 
-    /* Wallet Page Styles */
-    .wallet-section {
-      margin-bottom: 32px;
+    .wallet-page {
+      width: min(100% - 32px, 1040px);
+      margin: 24px auto 40px;
     }
 
-    /* Balance Card */
-    .balance-card {
-      background: linear-gradient(135deg, #be8282 0%, #a0636b 100%);
-      border-radius: 16px;
-      padding: 32px 24px;
-      color: #ffffff;
-      box-shadow: 0 8px 32px rgba(190, 130, 130, 0.3);
-      margin-bottom: 24px;
-    }
-
-    .balance-header {
+    .wallet-intro {
       display: flex;
+      align-items: flex-end;
       justify-content: space-between;
-      align-items: center;
+      gap: 16px;
       margin-bottom: 20px;
     }
 
-    .balance-header h2 {
+    .wallet-intro h2 {
       margin: 0;
-      font-size: 18px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
+      color: #3a3330;
+      font-size: 25px;
     }
 
-    .balance-amount {
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      letter-spacing: -1px;
+    .wallet-intro p {
+      margin: 6px 0 0;
+      color: #80736f;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
-    .balance-footer {
+    .wallet-overview {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      padding-top: 16px;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding: 20px 22px;
+      background: #fff;
+      border: 1px solid #e8d4c8;
+      border-radius: 14px;
     }
 
-    .last-updated {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    /* Wallet Action Buttons */
-    .wallet-actions {
+    .wallet-icon {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 32px;
+      width: 52px;
+      height: 52px;
+      flex: 0 0 auto;
+      place-items: center;
+      color: #a0636b;
+      background: #f8eee8;
+      border-radius: 14px;
     }
 
-    .action-btn {
+    .wallet-icon svg { width: 25px; height: 25px; }
+    .wallet-overview h3 { margin: 0 0 4px; font-size: 15px; }
+    .wallet-overview p { margin: 0; color: #80736f; font-size: 13px; line-height: 1.5; }
+
+    .wallet-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+      align-items: start;
+      gap: 18px;
+    }
+
+    .wallet-panel {
+      min-width: 0;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #e8d4c8;
+      border-radius: 14px;
+    }
+
+    .wallet-panel-header {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .wallet-panel-header h3 { margin: 0; font-size: 16px; }
+    .wallet-panel-header p { margin: 4px 0 0; color: #80736f; font-size: 12px; }
+
+    .wallet-button {
+      display: inline-flex;
+      min-height: 36px;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 16px 12px;
-      background: #ffffff;
-      border: 2px solid #e8d4c8;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: #3a3330;
-      transition: all 0.3s ease;
-      min-height: 100px;
-    }
-
-    .action-btn:hover {
-      background: #f9f5f1;
-      border-color: #be8282;
-      box-shadow: 0 4px 12px rgba(190, 130, 130, 0.15);
-      transform: translateY(-2px);
-    }
-
-    .action-btn i {
-      color: #be8282;
-    }
-
-    /* Section Headers */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid #e8d4c8;
-    }
-
-    .section-header h3 {
-      margin: 0;
-      font-size: 20px;
+      gap: 7px;
+      padding: 7px 11px;
+      color: #fff;
+      background: #a96770;
+      border: 1px solid #a96770;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 12px;
       font-weight: 700;
-      color: #3a3330;
-    }
-
-    .view-all,
-    .add-method-btn {
-      color: #be8282;
-      font-size: 14px;
-      font-weight: 600;
       text-decoration: none;
       cursor: pointer;
-      border: none;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.2s ease;
     }
 
-    .view-all:hover,
-    .add-method-btn:hover {
-      color: #a0636b;
+    .wallet-button svg { width: 15px; height: 15px; }
+    .wallet-button.secondary { color: #705852; background: #fff; border-color: #e8d4c8; }
+    .wallet-button:focus-visible,
+    .wallet-remove:focus-visible,
+    .wallet-preference input:focus-visible,
+    .wallet-dialog button:focus-visible,
+    .wallet-dialog input:focus-visible,
+    .wallet-dialog select:focus-visible {
+      outline: 3px solid #d6a6a5;
+      outline-offset: 2px;
     }
 
-    /* Transactions Section */
-    .transactions-section {
-      background: #ffffff;
-      border: 1px solid #e8d4c8;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 32px;
-    }
+    .wallet-method-list { display: grid; gap: 10px; }
 
-    .transactions-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .transaction-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: #fcf9f5;
-      border-radius: 12px;
-      border: 1px solid #e8d4c8;
-      transition: all 0.2s ease;
-    }
-
-    .transaction-item:hover {
-      background: #faf6f1;
-      border-color: #d4bfb5;
-    }
-
-    .transaction-icon {
+    .wallet-method {
       display: grid;
-      place-items: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      color: #ffffff;
-    }
-
-    .transaction-icon.success {
-      background: #e8f5e9;
-      color: #2e7d32;
-    }
-
-    .transaction-icon.debit {
-      background: #ffebee;
-      color: #c62828;
-    }
-
-    .transaction-details {
-      display: flex;
-      justify-content: space-between;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
       align-items: center;
-      flex: 1;
-      gap: 16px;
+      gap: 12px;
+      padding: 12px;
+      background: #fcf9f5;
+      border: 1px solid #efe2d8;
+      border-radius: 10px;
     }
 
-    .transaction-description h4 {
-      margin: 0 0 4px 0;
-      font-size: 15px;
-      font-weight: 600;
-      color: #3a3330;
+    .wallet-method-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: #a0636b;
+      background: #f8eee8;
+      border-radius: 10px;
     }
 
-    .transaction-description .transaction-meta {
-      margin: 0;
-      font-size: 13px;
-      color: #8b7b77;
+    .wallet-method-icon svg { width: 20px; height: 20px; }
+    .wallet-method-name { margin: 0; font-size: 13px; font-weight: 700; }
+    .wallet-method-type { margin: 4px 0 0; color: #80736f; font-size: 11px; }
+
+    .wallet-method-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
     }
 
-    .transaction-amount {
-      font-size: 16px;
+    .wallet-default {
+      padding: 4px 7px;
+      color: #42704c;
+      background: #edf6ee;
+      border-radius: 999px;
+      font-size: 10px;
       font-weight: 700;
       white-space: nowrap;
     }
 
-    .transaction-amount.success {
-      color: #2e7d32;
-    }
-
-    .transaction-amount.debit {
-      color: #c62828;
-    }
-
-    .transaction-time {
-      font-size: 12px;
-      color: #8b7b77;
-      white-space: nowrap;
-    }
-
-    /* Payment Methods Section */
-    .payment-methods-section {
-      background: #ffffff;
-      border: 1px solid #e8d4c8;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 32px;
-    }
-
-    .payment-methods-grid {
+    .wallet-remove {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .payment-method-card {
-      background: linear-gradient(135deg, #f5e6d3 0%, #fcf8f2 100%);
-      border: 2px solid #e8d4c8;
-      border-radius: 16px;
-      padding: 20px;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    .payment-method-card:hover {
-      border-color: #be8282;
-      box-shadow: 0 8px 24px rgba(190, 130, 130, 0.15);
-      transform: translateY(-4px);
-    }
-
-    .card-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-      font-weight: 600;
-      color: #3a3330;
-    }
-
-    .card-brand i {
-      color: #be8282;
-    }
-
-    .card-number {
-      font-size: 18px;
-      font-weight: 600;
-      color: #3a3330;
-      margin: 0 0 16px 0;
-      letter-spacing: 2px;
-    }
-
-    .card-details {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      font-size: 12px;
-      color: #8b7b77;
-    }
-
-    .card-holder {
-      font-weight: 600;
-    }
-
-    .default-badge {
-      display: inline-block;
-      background: #4caf50;
-      color: #ffffff;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .card-action-btn {
-      width: 100%;
-      padding: 8px 12px;
-      background: transparent;
-      border: 1px solid #e8d4c8;
-      border-radius: 8px;
-      color: #be8282;
-      font-size: 13px;
-      font-weight: 600;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      color: #96545b;
+      background: #fff;
+      border: 1px solid #eadbd0;
+      border-radius: 7px;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .card-action-btn:hover {
-      background: #be8282;
-      border-color: #be8282;
-      color: #ffffff;
+    .wallet-remove svg { width: 15px; height: 15px; }
+
+    .wallet-empty-methods {
+      padding: 22px 14px;
+      color: #80736f;
+      background: #fcf9f5;
+      border: 1px dashed #e2cec1;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .wallet-actions {
-        grid-template-columns: repeat(2, 1fr);
+    .wallet-preferences { display: grid; gap: 0; }
+
+    .wallet-preference {
+      display: flex;
+      min-height: 60px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0e6df;
+      cursor: pointer;
+    }
+
+    .wallet-preference:last-child { border-bottom: 0; }
+    .wallet-preference-copy { display: grid; gap: 3px; }
+    .wallet-preference-copy strong { color: #3a3330; font-size: 12px; }
+    .wallet-preference-copy small { color: #80736f; font-size: 11px; line-height: 1.4; }
+
+    .wallet-preference input {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      accent-color: #a96770;
+      cursor: pointer;
+    }
+
+    .wallet-note {
+      margin: 14px 0 0;
+      color: #80736f;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .wallet-error {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      color: #8b2635;
+      background: #fff1f2;
+      border: 1px solid #f0c7cd;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .wallet-dialog {
+      width: min(420px, calc(100vw - 32px));
+      padding: 0;
+      color: #3a3330;
+      background: #fff;
+      border: 1px solid #e8d4c8;
+      border-radius: 14px;
+    }
+
+    .wallet-dialog::backdrop { background: rgba(43, 32, 29, .36); }
+    .wallet-dialog form { display: grid; gap: 14px; padding: 20px; }
+    .wallet-dialog h3 { margin: 0; font-size: 18px; }
+    .wallet-dialog p { margin: -8px 0 0; color: #80736f; font-size: 12px; line-height: 1.5; }
+    .wallet-field { display: grid; gap: 6px; }
+    .wallet-field label { font-size: 12px; font-weight: 700; }
+    .wallet-field input, .wallet-field select {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 10px;
+      color: #3a3330;
+      background: #fff;
+      border: 1px solid #ddc9bd;
+      border-radius: 7px;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    .wallet-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+    .wallet-dialog-error { min-height: 16px; margin: 0; color: #8b2635; font-size: 12px; }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 700px) {
+      :root {
+        --content-offset: 80px;
+        --header-top: 12px;
       }
 
-      .transaction-details {
-        flex-direction: column;
-        align-items: flex-start;
+      body:has(.sidebar:not(.collapsed)) {
+        --content-offset: 80px;
       }
 
-      .transaction-time {
-        align-self: flex-start;
+      .sidebar,
+      .sidebar:not(.collapsed) {
+        top: 12px;
+        left: 12px;
+        width: 56px;
+        margin: 0;
       }
 
-      .balance-amount {
-        font-size: 36px;
+      .sidebar .nav button span,
+      .sidebar .profile-name {
+        display: none;
       }
 
-      .payment-methods-grid {
-        grid-template-columns: 1fr;
+      .sidebar .nav button,
+      .sidebar .profile-button {
+        justify-content: center;
+        padding: 0;
+      }
+
+      .main-content {
+        width: calc(100% - var(--content-offset));
+        margin-left: var(--content-offset);
+        padding: 150px 0 24px;
+      }
+
+      .header {
+        padding: 4px 10px;
+      }
+
+      .header h1 {
+        font-size: 22px;
+      }
+
+      .header .divider {
+        margin: 8px 0 6px;
+      }
+
+      .nav-tabs a {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+
+      .wallet-page { width: calc(100% - 24px); margin-top: 20px; }
+      .wallet-columns { grid-template-columns: 1fr; }
+      .wallet-intro { align-items: flex-start; flex-direction: column; }
+      .wallet-intro h2 { font-size: 21px; }
+      .wallet-panel { padding: 16px; }
+    }
+
+    @media (max-width: 380px) {
+      :root {
+        --content-offset: 68px;
+      }
+
+      body:has(.sidebar:not(.collapsed)) {
+        --content-offset: 68px;
+      }
+
+      .sidebar,
+      .sidebar:not(.collapsed) {
+        left: 8px;
+        width: 48px;
       }
     }
   </style>
+  <link rel="stylesheet" href="site-sidebar.css" />
 </head>
 
 <body>
@@ -1033,7 +1046,7 @@
           </button>
         </li>
         <li>
-          <button type="button" data-page="wallet.html ">
+          <button type="button" data-page="wallet.html">
             <i data-lucide="wallet" class="sidebar-icon"></i>
             <span>Wallet</span>
           </button>
@@ -1055,7 +1068,7 @@
 
       <div class="profile-section">
         <button type="button" class="profile-button" aria-label="Open profile" data-page="login.html">
-          <span class="profile-avatar">A</span>
+          <span class="profile-avatar"><i data-lucide="user-round" aria-hidden="true"></i></span>
           <span class="profile-name">Profile</span>
         </button>
       </div>
@@ -1069,42 +1082,242 @@
         <h4>Location:------------</h4>
         <hr class="divider" />
         <nav class="nav-tabs">
-          <a href="#" class="active">🛍️ All</a>
-          <a href="#">☕ Cafe</a>
-          <a href="#">🏠 Home</a>
-          <a href="#">🎮 Toys</a>
-          <a href="#">🥬 Fresh</a>
-          <a href="#">🎧 Electronics</a>
-          <a href="#">📱 Mobiles</a>
-          <a href="#">💄 Beauty</a>
-          <a href="#">👗 Fashion</a>
-          <a href="#">🎮 Toys</a>
-          <a href="#">🥬 Fresh</a>
-          <a href="#">Skincare</a>
-          <a href="#">Baby Product</a>
-          <a href="#">Special</a>
-          <a href="#">Men's</a>
+          <a href="index.html" class="active">🛍️ All</a>
+          <a href="cafe.html">☕ Cafe</a>
+          <a href="index.html">🏠 Home</a>
+          <a href="toys.html">🎮 Toys</a>
+          <a href="fresh.html">🥬 Fresh</a>
+          <a href="electronics.html">🎧 Electronics</a>
+          <a href="mobiles.html">📱 Mobiles</a>
+          <a href="beauty.html">💄 Beauty</a>
+          <a href="fashion.html">👗 Fashion</a>
         </nav>
       </div>
 
-      <!-- Wallet Balance Card -->
-      <div class="wallet-section">
-      </div>
-
-      <!-- Recent Transactions -->
-      <div class="transactions-section">
-      </div>
-
-      <!-- Payment Methods Section -->
-      <div class="payment-methods-section">
-      </div>
+      <section class="wallet-page" aria-labelledby="wallet-title">
+        <div id="wallet-error" class="wallet-error" role="alert" hidden></div>
+        <header class="wallet-intro">
+          <div>
+            <h2 id="wallet-title">Wallet</h2>
+            <p>Manage your saved payment methods and wallet preferences.</p>
+          </div>
+          <a class="wallet-button secondary" href="index.html">Continue shopping</a>
+        </header>
+        <div class="wallet-overview">
+          <span class="wallet-icon" aria-hidden="true">
+            <i data-lucide="wallet-cards"></i>
+          </span>
+          <div>
+            <h3>Payment options, organized</h3>
+            <p>Keep track of the payment methods you prefer to use. This page stores labels only and never asks for card or account details.</p>
+          </div>
         </div>
-      </div>
+        <div class="wallet-columns">
+          <section class="wallet-panel" aria-labelledby="payment-methods-title">
+            <div class="wallet-panel-header">
+              <div>
+                <h3 id="payment-methods-title">Payment methods</h3>
+                <p id="payment-method-count">No saved methods</p>
+              </div>
+              <button id="add-method" class="wallet-button" type="button">
+                <i data-lucide="plus" aria-hidden="true"></i>
+                Add method
+              </button>
+            </div>
+            <div id="wallet-method-list" class="wallet-method-list"></div>
+            <p class="wallet-note">Saved entries are labels only. Enter payment details only in a secure checkout when a payment provider is available.</p>
+          </section>
+          <section class="wallet-panel" aria-labelledby="wallet-preferences-title">
+            <div class="wallet-panel-header">
+              <div>
+                <h3 id="wallet-preferences-title">Wallet preferences</h3>
+                <p>Choose how this page behaves.</p>
+              </div>
+            </div>
+            <div class="wallet-preferences">
+              <label class="wallet-preference">
+                <span class="wallet-preference-copy">
+                  <strong>Confirm before removing</strong>
+                  <small>Ask before deleting a saved method label.</small>
+                </span>
+                <input id="preference-confirm-remove" type="checkbox" checked />
+              </label>
+              <label class="wallet-preference">
+                <span class="wallet-preference-copy">
+                  <strong>Remember this device</strong>
+                  <small>Keep your method labels and preferences in this browser.</small>
+                </span>
+                <input id="preference-device" type="checkbox" checked />
+              </label>
+            </div>
+            <p class="wallet-note">No balance or transaction information is collected or displayed here.</p>
+          </section>
+        </div>
+      </section>
     </div>
   </main>
+  <dialog id="wallet-dialog" class="wallet-dialog" aria-labelledby="wallet-dialog-title">
+    <form id="wallet-method-form">
+      <h3 id="wallet-dialog-title">Add a payment method label</h3>
+      <p>This saves a display label only. Do not enter card numbers, account numbers, or payment credentials.</p>
+      <div class="wallet-field">
+        <label for="method-type">Method type</label>
+        <select id="method-type" required>
+          <option value="UPI">UPI</option>
+          <option value="Credit or debit card">Credit or debit card</option>
+          <option value="Cash on delivery">Cash on delivery</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="wallet-field">
+        <label for="method-label">Display label</label>
+        <input id="method-label" type="text" maxlength="40" placeholder="e.g. Preferred UPI" required />
+      </div>
+      <p id="wallet-dialog-error" class="wallet-dialog-error" role="alert"></p>
+      <div class="wallet-dialog-actions">
+        <button id="cancel-method" class="wallet-button secondary" type="button">Cancel</button>
+        <button class="wallet-button" type="submit">Save label</button>
+      </div>
+    </form>
+  </dialog>
   <script>
     const sidebar = document.querySelector(".sidebar");
     const collapseBtn = document.getElementById("collapseBtn");
+    const walletError = document.getElementById("wallet-error");
+    const walletDialog = document.getElementById("wallet-dialog");
+    const walletForm = document.getElementById("wallet-method-form");
+    const walletMethodList = document.getElementById("wallet-method-list");
+    const walletMethodsKey = "shop-wallet-method-labels";
+    const walletSettingsKey = "shop-wallet-preferences";
+    let walletMethods = [];
+    let walletPreferences = { rememberDevice: true, confirmRemoval: true };
+
+    function readWalletState() {
+      try {
+        const savedPreferences = localStorage.getItem(walletSettingsKey);
+        if (savedPreferences) {
+          const parsedPreferences = JSON.parse(savedPreferences);
+          if (typeof parsedPreferences.rememberDevice !== "boolean" ||
+              typeof parsedPreferences.confirmRemoval !== "boolean") {
+            throw new Error("Saved wallet preferences are invalid.");
+          }
+          walletPreferences = {
+            rememberDevice: parsedPreferences.rememberDevice,
+            confirmRemoval: parsedPreferences.confirmRemoval
+          };
+        }
+
+        document.getElementById("preference-device").checked = walletPreferences.rememberDevice;
+        document.getElementById("preference-confirm-remove").checked = walletPreferences.confirmRemoval;
+
+        if (!walletPreferences.rememberDevice) return;
+
+        const savedMethods = localStorage.getItem(walletMethodsKey);
+        if (!savedMethods) return;
+        const parsedMethods = JSON.parse(savedMethods);
+        if (!Array.isArray(parsedMethods) || parsedMethods.some((method) =>
+          !method ||
+          typeof method.id !== "string" ||
+          typeof method.type !== "string" ||
+          typeof method.label !== "string" ||
+          typeof method.preferred !== "boolean"
+        )) {
+          throw new Error("Saved wallet method labels are invalid.");
+        }
+        walletMethods = parsedMethods;
+      } catch (error) {
+        console.error("Unable to load wallet preferences.", error);
+        throw new Error("Wallet settings could not be loaded from this browser.");
+      }
+    }
+
+    function saveWalletState() {
+      try {
+        localStorage.setItem(walletSettingsKey, JSON.stringify(walletPreferences));
+        if (walletPreferences.rememberDevice) {
+          localStorage.setItem(walletMethodsKey, JSON.stringify(walletMethods));
+        } else {
+          localStorage.removeItem(walletMethodsKey);
+        }
+      } catch (error) {
+        console.error("Unable to save wallet preferences.", error);
+        throw new Error("Wallet settings could not be saved. Check browser storage settings.");
+      }
+    }
+
+    function setWalletError(message) {
+      walletError.textContent = message;
+      walletError.hidden = !message;
+    }
+
+    function renderWalletMethods() {
+      walletMethodList.replaceChildren();
+      const count = walletMethods.length;
+      document.getElementById("payment-method-count").textContent =
+        `${count} saved ${count === 1 ? "method" : "methods"}`;
+
+      if (count === 0) {
+        const empty = document.createElement("div");
+        empty.className = "wallet-empty-methods";
+        empty.textContent = "No payment method labels yet. Add a label to organize your preferred ways to pay.";
+        walletMethodList.append(empty);
+        return;
+      }
+
+      walletMethods.forEach((method) => {
+        const row = document.createElement("article");
+        row.className = "wallet-method";
+
+        const icon = document.createElement("span");
+        icon.className = "wallet-method-icon";
+        const iconElement = document.createElement("i");
+        iconElement.setAttribute("data-lucide", method.type.toLowerCase().includes("card") ? "credit-card" : "wallet");
+        iconElement.setAttribute("aria-hidden", "true");
+        icon.append(iconElement);
+
+        const details = document.createElement("div");
+        const label = document.createElement("h4");
+        label.className = "wallet-method-name";
+        label.textContent = method.label;
+        const type = document.createElement("p");
+        type.className = "wallet-method-type";
+        type.textContent = method.type;
+        details.append(label, type);
+
+        const actions = document.createElement("div");
+        actions.className = "wallet-method-actions";
+        if (method.preferred) {
+          const preferred = document.createElement("span");
+          preferred.className = "wallet-default";
+          preferred.textContent = "Preferred";
+          actions.append(preferred);
+        } else {
+          const preferredButton = document.createElement("button");
+          preferredButton.className = "wallet-button secondary";
+          preferredButton.type = "button";
+          preferredButton.dataset.walletAction = "preferred";
+          preferredButton.dataset.methodId = method.id;
+          preferredButton.textContent = "Set preferred";
+          actions.append(preferredButton);
+        }
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "wallet-remove";
+        removeButton.type = "button";
+        removeButton.dataset.walletAction = "remove";
+        removeButton.dataset.methodId = method.id;
+        removeButton.setAttribute("aria-label", `Remove ${method.label}`);
+        const trashIcon = document.createElement("i");
+        trashIcon.setAttribute("data-lucide", "trash-2");
+        trashIcon.setAttribute("aria-hidden", "true");
+        removeButton.append(trashIcon);
+        actions.append(removeButton);
+        row.append(icon, details, actions);
+        walletMethodList.append(row);
+      });
+
+      lucide.createIcons();
+    }
 
     collapseBtn.addEventListener("click", () => {
       sidebar.classList.toggle("collapsed");
@@ -1150,30 +1363,124 @@
       window.location.href = "login.html";
     });
 
-    // Wallet page interactions
-    document.querySelectorAll(".action-btn").forEach((btn) => {
-      btn.addEventListener("click", function() {
-        const action = this.className.match(/\b(add-money|transfer|withdraw|request)\b-btn/)?.[1];
-        if (action) {
-          alert(`${action.charAt(0).toUpperCase() + action.slice(1)} feature will be available soon!`);
-        }
-      });
+    document.getElementById("add-method").addEventListener("click", () => {
+      document.getElementById("wallet-dialog-error").textContent = "";
+      walletForm.reset();
+      walletDialog.showModal();
+      document.getElementById("method-label").focus();
     });
 
-    document.querySelectorAll(".card-action-btn").forEach((btn) => {
-      btn.addEventListener("click", function(e) {
-        e.preventDefault();
-        if (this.textContent.trim() === "Remove") {
-          this.parentElement.style.opacity = "0.5";
-          this.textContent = "Removed";
-          this.disabled = true;
-        }
+    document.getElementById("cancel-method").addEventListener("click", () => walletDialog.close());
+
+    walletForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const type = document.getElementById("method-type").value;
+      const label = document.getElementById("method-label").value.trim();
+      const dialogError = document.getElementById("wallet-dialog-error");
+      if (!label) {
+        dialogError.textContent = "Enter a display label.";
+        return;
+      }
+      if (walletMethods.some((method) => method.type === type && method.label.toLowerCase() === label.toLowerCase())) {
+        dialogError.textContent = "That label is already saved for this payment type.";
+        return;
+      }
+
+      walletMethods.push({
+        id: crypto.randomUUID(),
+        type,
+        label,
+        preferred: walletMethods.length === 0
       });
+      try {
+        saveWalletState();
+        renderWalletMethods();
+        setWalletError("");
+        walletDialog.close();
+      } catch (error) {
+        console.error("Unable to add a wallet method label.", error);
+        walletMethods.pop();
+        dialogError.textContent = error.message;
+      }
     });
+
+    walletMethodList.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-wallet-action]");
+      if (!button) return;
+      const method = walletMethods.find((item) => item.id === button.dataset.methodId);
+      if (!method) return;
+
+      if (button.dataset.walletAction === "remove" && walletPreferences.confirmRemoval &&
+          !window.confirm(`Remove "${method.label}" from your saved labels?`)) {
+        return;
+      }
+
+      const previousMethods = walletMethods;
+      if (button.dataset.walletAction === "preferred") {
+        walletMethods = walletMethods.map((item) => ({ ...item, preferred: item.id === method.id }));
+      } else if (button.dataset.walletAction === "remove") {
+        walletMethods = walletMethods.filter((item) => item.id !== method.id);
+        if (!walletMethods.some((item) => item.preferred) && walletMethods.length > 0) {
+          walletMethods[0].preferred = true;
+        }
+      } else {
+        return;
+      }
+
+      try {
+        saveWalletState();
+        renderWalletMethods();
+        setWalletError("");
+      } catch (error) {
+        console.error("Unable to update wallet method labels.", error);
+        walletMethods = previousMethods;
+        setWalletError(error.message);
+        renderWalletMethods();
+      }
+    });
+
+    document.getElementById("preference-device").addEventListener("change", (event) => {
+      const previousValue = walletPreferences.rememberDevice;
+      walletPreferences.rememberDevice = event.currentTarget.checked;
+      try {
+        saveWalletState();
+        if (!walletPreferences.rememberDevice) walletMethods = [];
+        renderWalletMethods();
+        setWalletError("");
+      } catch (error) {
+        console.error("Unable to update the wallet storage preference.", error);
+        walletPreferences.rememberDevice = previousValue;
+        event.currentTarget.checked = previousValue;
+        setWalletError(error.message);
+      }
+    });
+
+    document.getElementById("preference-confirm-remove").addEventListener("change", (event) => {
+      const previousValue = walletPreferences.confirmRemoval;
+      walletPreferences.confirmRemoval = event.currentTarget.checked;
+      try {
+        saveWalletState();
+        setWalletError("");
+      } catch (error) {
+        console.error("Unable to update the wallet confirmation preference.", error);
+        walletPreferences.confirmRemoval = previousValue;
+        event.currentTarget.checked = previousValue;
+        setWalletError(error.message);
+      }
+    });
+
+    try {
+      readWalletState();
+      renderWalletMethods();
+    } catch (error) {
+      setWalletError(error.message);
+      renderWalletMethods();
+    }
 
     // Initialize Lucide icons
     lucide.createIcons();
   </script>
+  <script src="site-sidebar.js"></script>
 </body>
 
 </html>

@@ -9,7 +9,7 @@
     :root {
       --content-offset: 112px;
       --header-top: 24px;
-      --header-height: 134px;
+      --header-height: 160px;
       --ink: #3a3330;
       --muted: #80736f;
       --border: #e8d4c8;
@@ -81,6 +81,22 @@
       border-top: 1px solid var(--border);
       text-decoration: none;
     }
+    .checkout-link {
+      display: flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      padding: 9px 12px;
+      color: #fff;
+      background: var(--rose);
+      border: 1px solid var(--rose);
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .checkout-link:hover { background: #8b5563; }
     .sidebar-profile-icon {
       display: grid;
       width: 32px;
@@ -98,7 +114,7 @@
       z-index: 0;
       min-height: 100vh;
       margin-left: var(--content-offset);
-      padding: 174px 24px 40px 0;
+      padding: calc(var(--header-top) + var(--header-height) + 16px) 24px 40px 0;
     }
     .header {
       position: fixed;
@@ -119,33 +135,12 @@
       isolation: isolate;
     }
     body:has(.sidebar.expanded) { --content-offset: 298px; }
-    .header h1 { width: 100%; margin: 0; text-align: center; font-size: 26px; }
-    .header p { margin: 3px 0 8px; color: var(--muted); font-size: 13px; }
-    .category-nav {
-      display: flex;
+    .header-logo { display: block; width: min(160px, 100%); height: auto; max-height: 60px; margin: 0 auto; }
+    .header-divider {
       width: 100%;
-      min-height: 40px;
-      align-items: center;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 0 4px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #be8282 #f5e6d3;
+      margin: 14px 0 8px;
     }
-    .category-nav a {
-      flex: 0 0 auto;
-      padding: 6px 10px;
-      color: var(--muted);
-      border-radius: 7px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .category-nav a:hover,
-    .category-nav a[aria-current="page"] { color: var(--ink); background: #f1e4d3; }
+    .header h1 { width: 100%; margin: 0; text-align: center; font-size: 26px; }
     .cart-page { width: min(100%, 1180px); margin: 8px auto 0; }
     .cart-heading {
       display: flex;
@@ -297,12 +292,10 @@
       .sidebar.expanded .sidebar-nav span, .sidebar.expanded .sidebar-profile span:last-child { display: none; }
       .sidebar-profile { justify-content: center; padding: 0; }
       body:has(.sidebar.expanded) { --content-offset: 80px; }
-      .main-content { padding: 158px 12px 28px 0; }
+      .main-content { padding: calc(var(--header-top) + var(--header-height) + 12px) 12px 28px 0; }
       .header { padding: 4px 8px; }
+      .header-logo { width: min(160px, 100%); }
       .header h1 { font-size: 22px; }
-      .header p { margin: 2px 0 5px; font-size: 12px; }
-      .category-nav { min-height: 38px; }
-      .category-nav a { padding: 5px 8px; font-size: 12px; }
       .cart-heading h2 { font-size: 21px; }
       .cart-layout { grid-template-columns: 1fr; }
       .order-summary { grid-row: 1; }
@@ -337,19 +330,9 @@
 
   <main class="main-content">
     <header class="header">
+      <img class="header-logo" src="logo/sameep-animated.svg" alt="Sameep / समीप">
+      <hr class="header-divider" aria-hidden="true">
       <h1>Your Cart</h1>
-      <p>Review your items before checkout</p>
-      <nav class="category-nav" aria-label="Shop categories">
-        <a href="index.html">🛍️ All</a>
-        <a href="cafe.html">☕ Cafe</a>
-        <a href="index.html">🏠 Home</a>
-        <a href="toys.html">🎮 Toys</a>
-        <a href="fresh.html">🥬 Fresh</a>
-        <a href="electronics.html">🎧 Electronics</a>
-        <a href="mobiles.html">📱 Mobiles</a>
-        <a href="beauty.html">💄 Beauty</a>
-        <a href="fashion.html">👗 Fashion</a>
-      </nav>
     </header>
     <section class="cart-page" aria-labelledby="cart-title">
       <div id="cart-error" class="cart-error" role="alert" hidden></div>
@@ -371,6 +354,7 @@
           <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">₹0</span></div>
           <div class="summary-row summary-total"><span>Total</span><span id="summary-total">₹0</span></div>
           <p class="summary-note">Delivery and any applicable charges are calculated at checkout.</p>
+          <a class="checkout-link" href="checkout.html">Proceed to checkout</a>
           <a class="continue-link" href="index.html">Continue shopping</a><br />
           <button id="clear-cart" class="clear-cart" type="button">Clear cart</button>
         </aside>

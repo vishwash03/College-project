@@ -12,7 +12,7 @@
     :root {
       --content-offset: 112px;
       --header-top: 24px;
-      --header-height: 134px;
+      --header-height: 160px;
       --header-clearance: 12px;
       scroll-padding-top: calc(var(--header-top) + var(--header-height) + var(--header-clearance));
     }
@@ -38,7 +38,7 @@
       width: calc(100% - var(--content-offset));
       margin-left: var(--content-offset);
       min-height: 100vh;
-      padding: 150px 0 32px;
+      padding: calc(var(--header-top) + var(--header-height)) 0 32px;
     }
 
     .content {
@@ -79,6 +79,14 @@
       text-align: center;
     }
 
+    .header-logo {
+      display: block;
+      width: min(160px, 100%);
+      height: auto;
+      max-height: 60px;
+      margin: 0 auto;
+    }
+
     .header h4 {
       width: 100%;
       margin: 4px 0 0;
@@ -107,14 +115,12 @@
       overflow-y: hidden;
       padding: 0 4px;
       scroll-behavior: smooth;
-      border: 1px solid #e8d4c8;
-      border-radius: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #be8282 #f5e6d3;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
     .nav-tabs::-webkit-scrollbar {
-      height: 6px;
+      display: none;
     }
 
     .nav-tabs::-webkit-scrollbar-track {
@@ -713,7 +719,7 @@
       gap: 16px;
       margin-bottom: 18px;
       padding: 20px 22px;
-      background: #fff;
+      background: linear-gradient(110deg, #fff 0%, #f8eee8 100%);
       border: 1px solid #e8d4c8;
       border-radius: 14px;
     }
@@ -730,15 +736,12 @@
     }
 
     .wallet-icon svg { width: 25px; height: 25px; }
+    .wallet-overview-copy { min-width: 0; flex: 1; }
     .wallet-overview h3 { margin: 0 0 4px; font-size: 15px; }
     .wallet-overview p { margin: 0; color: #80736f; font-size: 13px; line-height: 1.5; }
-
-    .wallet-columns {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
-      align-items: start;
-      gap: 18px;
-    }
+    .wallet-overview-balance { display: grid; flex: 0 0 auto; gap: 3px; text-align: right; }
+    .wallet-overview-balance span { color: #80736f; font-size: 12px; }
+    .wallet-overview-balance strong { color: #3a3330; font-size: 23px; }
 
     .wallet-panel {
       min-width: 0;
@@ -758,6 +761,104 @@
 
     .wallet-panel-header h3 { margin: 0; font-size: 16px; }
     .wallet-panel-header p { margin: 4px 0 0; color: #80736f; font-size: 12px; }
+
+    .wallet-demo-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      color: #705852;
+      background: #f8eee8;
+      border: 1px solid #e8d4c8;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .wallet-demo-notice svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: #a0636b;
+    }
+
+    .wallet-topup-form {
+      display: grid;
+      gap: 14px;
+      max-width: 540px;
+    }
+
+    .wallet-amount-choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .wallet-amount-choice {
+      min-height: 42px;
+      color: #705852;
+      background: #fff;
+      border: 1px solid #e8d4c8;
+      border-radius: 9px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .wallet-amount-choice:hover,
+    .wallet-amount-choice[aria-pressed="true"] {
+      color: #3a3330;
+      background: #f5e6d3;
+      border-color: #be8282;
+    }
+
+    .wallet-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .wallet-field label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .wallet-field input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 12px;
+      color: #3a3330;
+      background: #fff;
+      border: 1px solid #ddc9bd;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 15px;
+    }
+
+    .wallet-field input:focus-visible,
+    .wallet-amount-choice:focus-visible {
+      outline: 3px solid #d6a6a5;
+      outline-offset: 2px;
+    }
+
+    .wallet-form-hint {
+      margin: -7px 0 0;
+      color: #80736f;
+      font-size: 12px;
+    }
+
+    .wallet-form-status {
+      min-height: 20px;
+      margin: 0;
+      color: #386b4d;
+      font-size: 13px;
+    }
+
+    .wallet-form-status[data-error="true"] {
+      color: #a13d36;
+    }
 
     .wallet-button {
       display: inline-flex;
@@ -779,157 +880,11 @@
 
     .wallet-button svg { width: 15px; height: 15px; }
     .wallet-button.secondary { color: #705852; background: #fff; border-color: #e8d4c8; }
-    .wallet-button:focus-visible,
-    .wallet-remove:focus-visible,
-    .wallet-preference input:focus-visible,
-    .wallet-dialog button:focus-visible,
-    .wallet-dialog input:focus-visible,
-    .wallet-dialog select:focus-visible {
+    .wallet-button:focus-visible {
       outline: 3px solid #d6a6a5;
       outline-offset: 2px;
     }
 
-    .wallet-method-list { display: grid; gap: 10px; }
-
-    .wallet-method {
-      display: grid;
-      grid-template-columns: 42px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: #fcf9f5;
-      border: 1px solid #efe2d8;
-      border-radius: 10px;
-    }
-
-    .wallet-method-icon {
-      display: grid;
-      width: 42px;
-      height: 42px;
-      place-items: center;
-      color: #a0636b;
-      background: #f8eee8;
-      border-radius: 10px;
-    }
-
-    .wallet-method-icon svg { width: 20px; height: 20px; }
-    .wallet-method-name { margin: 0; font-size: 13px; font-weight: 700; }
-    .wallet-method-type { margin: 4px 0 0; color: #80736f; font-size: 11px; }
-
-    .wallet-method-actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    .wallet-default {
-      padding: 4px 7px;
-      color: #42704c;
-      background: #edf6ee;
-      border-radius: 999px;
-      font-size: 10px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .wallet-remove {
-      display: grid;
-      width: 30px;
-      height: 30px;
-      place-items: center;
-      color: #96545b;
-      background: #fff;
-      border: 1px solid #eadbd0;
-      border-radius: 7px;
-      cursor: pointer;
-    }
-
-    .wallet-remove svg { width: 15px; height: 15px; }
-
-    .wallet-empty-methods {
-      padding: 22px 14px;
-      color: #80736f;
-      background: #fcf9f5;
-      border: 1px dashed #e2cec1;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .wallet-preferences { display: grid; gap: 0; }
-
-    .wallet-preference {
-      display: flex;
-      min-height: 60px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid #f0e6df;
-      cursor: pointer;
-    }
-
-    .wallet-preference:last-child { border-bottom: 0; }
-    .wallet-preference-copy { display: grid; gap: 3px; }
-    .wallet-preference-copy strong { color: #3a3330; font-size: 12px; }
-    .wallet-preference-copy small { color: #80736f; font-size: 11px; line-height: 1.4; }
-
-    .wallet-preference input {
-      width: 17px;
-      height: 17px;
-      flex: 0 0 auto;
-      accent-color: #a96770;
-      cursor: pointer;
-    }
-
-    .wallet-note {
-      margin: 14px 0 0;
-      color: #80736f;
-      font-size: 11px;
-      line-height: 1.5;
-    }
-
-    .wallet-error {
-      margin-bottom: 14px;
-      padding: 10px 12px;
-      color: #8b2635;
-      background: #fff1f2;
-      border: 1px solid #f0c7cd;
-      border-radius: 8px;
-      font-size: 12px;
-    }
-
-    .wallet-dialog {
-      width: min(420px, calc(100vw - 32px));
-      padding: 0;
-      color: #3a3330;
-      background: #fff;
-      border: 1px solid #e8d4c8;
-      border-radius: 14px;
-    }
-
-    .wallet-dialog::backdrop { background: rgba(43, 32, 29, .36); }
-    .wallet-dialog form { display: grid; gap: 14px; padding: 20px; }
-    .wallet-dialog h3 { margin: 0; font-size: 18px; }
-    .wallet-dialog p { margin: -8px 0 0; color: #80736f; font-size: 12px; line-height: 1.5; }
-    .wallet-field { display: grid; gap: 6px; }
-    .wallet-field label { font-size: 12px; font-weight: 700; }
-    .wallet-field input, .wallet-field select {
-      width: 100%;
-      min-height: 40px;
-      padding: 8px 10px;
-      color: #3a3330;
-      background: #fff;
-      border: 1px solid #ddc9bd;
-      border-radius: 7px;
-      font: inherit;
-      font-size: 13px;
-    }
-
-    .wallet-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
-    .wallet-dialog-error { min-height: 16px; margin: 0; color: #8b2635; font-size: 12px; }
     [hidden] { display: none !important; }
 
     @media (max-width: 700px) {
@@ -964,7 +919,7 @@
       .main-content {
         width: calc(100% - var(--content-offset));
         margin-left: var(--content-offset);
-        padding: 150px 0 24px;
+        padding: calc(var(--header-top) + var(--header-height)) 0 24px;
       }
 
       .header {
@@ -985,10 +940,28 @@
       }
 
       .wallet-page { width: calc(100% - 24px); margin-top: 20px; }
-      .wallet-columns { grid-template-columns: 1fr; }
       .wallet-intro { align-items: flex-start; flex-direction: column; }
       .wallet-intro h2 { font-size: 21px; }
       .wallet-panel { padding: 16px; }
+      .wallet-overview {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 12px;
+        padding: 16px;
+      }
+      .wallet-icon {
+        width: 44px;
+        height: 44px;
+        grid-row: 1 / span 2;
+      }
+      .wallet-overview-balance {
+        grid-column: 2;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        text-align: left;
+      }
+      .wallet-overview-balance strong { font-size: 20px; }
     }
 
     @media (max-width: 380px) {
@@ -1078,7 +1051,7 @@
   <main class="main-content">
     <div class="content">
       <div class="header">
-        <h1>NAME</h1>
+        <h1><img class="header-logo" src="logo/sameep-animated.svg" alt="Sameep / समीप"></h1>
         <h4>Location:------------</h4>
         <hr class="divider" />
         <nav class="nav-tabs">
@@ -1095,390 +1068,159 @@
       </div>
 
       <section class="wallet-page" aria-labelledby="wallet-title">
-        <div id="wallet-error" class="wallet-error" role="alert" hidden></div>
         <header class="wallet-intro">
           <div>
             <h2 id="wallet-title">Wallet</h2>
-            <p>Manage your saved payment methods and wallet preferences.</p>
+            <p>View your balance and add demo funds.</p>
           </div>
-          <a class="wallet-button secondary" href="index.html">Continue shopping</a>
         </header>
         <div class="wallet-overview">
           <span class="wallet-icon" aria-hidden="true">
             <i data-lucide="wallet-cards"></i>
           </span>
-          <div>
-            <h3>Payment options, organized</h3>
-            <p>Keep track of the payment methods you prefer to use. This page stores labels only and never asks for card or account details.</p>
+          <div class="wallet-overview-copy">
+            <h3>Wallet balance (demo)</h3>
+            <p>This simulated balance is saved only in this browser.</p>
+          </div>
+          <div class="wallet-overview-balance" id="wallet-balance-display" aria-label="Available wallet balance: zero rupees">
+            <span>Available balance</span>
+            <strong id="wallet-balance">₹0</strong>
           </div>
         </div>
-        <div class="wallet-columns">
-          <section class="wallet-panel" aria-labelledby="payment-methods-title">
-            <div class="wallet-panel-header">
-              <div>
-                <h3 id="payment-methods-title">Payment methods</h3>
-                <p id="payment-method-count">No saved methods</p>
-              </div>
-              <button id="add-method" class="wallet-button" type="button">
+        <section class="wallet-panel" aria-labelledby="wallet-topup-title">
+          <div class="wallet-panel-header">
+            <div>
+              <h3 id="wallet-topup-title">Add money</h3>
+              <p>Choose an amount to add to this demo wallet.</p>
+            </div>
+          </div>
+          <div class="wallet-demo-notice">
+            <i data-lucide="info" aria-hidden="true"></i>
+            <span>Demo only: this updates the balance saved in this browser. No payment is processed and no real money is added.</span>
+          </div>
+          <form id="wallet-topup-form" class="wallet-topup-form" novalidate>
+            <div class="wallet-amount-choices" aria-label="Choose a demo amount">
+              <button class="wallet-amount-choice" type="button" data-wallet-amount="100" aria-pressed="true">₹100</button>
+              <button class="wallet-amount-choice" type="button" data-wallet-amount="500" aria-pressed="false">₹500</button>
+              <button class="wallet-amount-choice" type="button" data-wallet-amount="1000" aria-pressed="false">₹1,000</button>
+            </div>
+            <div class="wallet-field">
+              <label for="wallet-topup-amount">Amount (₹)</label>
+              <input id="wallet-topup-amount" name="amount" type="number" min="10" max="50000" step="1" value="100" inputmode="numeric" required>
+            </div>
+            <p class="wallet-form-hint">Enter a whole amount between ₹10 and ₹50,000.</p>
+            <div>
+              <button class="wallet-button" type="submit">
                 <i data-lucide="plus" aria-hidden="true"></i>
-                Add method
+                Add demo money
               </button>
             </div>
-            <div id="wallet-method-list" class="wallet-method-list"></div>
-            <p class="wallet-note">Saved entries are labels only. Enter payment details only in a secure checkout when a payment provider is available.</p>
-          </section>
-          <section class="wallet-panel" aria-labelledby="wallet-preferences-title">
-            <div class="wallet-panel-header">
-              <div>
-                <h3 id="wallet-preferences-title">Wallet preferences</h3>
-                <p>Choose how this page behaves.</p>
-              </div>
-            </div>
-            <div class="wallet-preferences">
-              <label class="wallet-preference">
-                <span class="wallet-preference-copy">
-                  <strong>Confirm before removing</strong>
-                  <small>Ask before deleting a saved method label.</small>
-                </span>
-                <input id="preference-confirm-remove" type="checkbox" checked />
-              </label>
-              <label class="wallet-preference">
-                <span class="wallet-preference-copy">
-                  <strong>Remember this device</strong>
-                  <small>Keep your method labels and preferences in this browser.</small>
-                </span>
-                <input id="preference-device" type="checkbox" checked />
-              </label>
-            </div>
-            <p class="wallet-note">No balance or transaction information is collected or displayed here.</p>
-          </section>
-        </div>
+            <p id="wallet-topup-status" class="wallet-form-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
       </section>
     </div>
   </main>
-  <dialog id="wallet-dialog" class="wallet-dialog" aria-labelledby="wallet-dialog-title">
-    <form id="wallet-method-form">
-      <h3 id="wallet-dialog-title">Add a payment method label</h3>
-      <p>This saves a display label only. Do not enter card numbers, account numbers, or payment credentials.</p>
-      <div class="wallet-field">
-        <label for="method-type">Method type</label>
-        <select id="method-type" required>
-          <option value="UPI">UPI</option>
-          <option value="Credit or debit card">Credit or debit card</option>
-          <option value="Cash on delivery">Cash on delivery</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="wallet-field">
-        <label for="method-label">Display label</label>
-        <input id="method-label" type="text" maxlength="40" placeholder="e.g. Preferred UPI" required />
-      </div>
-      <p id="wallet-dialog-error" class="wallet-dialog-error" role="alert"></p>
-      <div class="wallet-dialog-actions">
-        <button id="cancel-method" class="wallet-button secondary" type="button">Cancel</button>
-        <button class="wallet-button" type="submit">Save label</button>
-      </div>
-    </form>
-  </dialog>
   <script>
-    const sidebar = document.querySelector(".sidebar");
-    const collapseBtn = document.getElementById("collapseBtn");
-    const walletError = document.getElementById("wallet-error");
-    const walletDialog = document.getElementById("wallet-dialog");
-    const walletForm = document.getElementById("wallet-method-form");
-    const walletMethodList = document.getElementById("wallet-method-list");
-    const walletMethodsKey = "shop-wallet-method-labels";
-    const walletSettingsKey = "shop-wallet-preferences";
-    let walletMethods = [];
-    let walletPreferences = { rememberDevice: true, confirmRemoval: true };
+    (() => {
+      const balanceKey = "shop-wallet-balance";
+      const balanceElement = document.getElementById("wallet-balance");
+      const balanceDisplay = document.getElementById("wallet-balance-display");
+      const amountInput = document.getElementById("wallet-topup-amount");
+      const form = document.getElementById("wallet-topup-form");
+      const status = document.getElementById("wallet-topup-status");
 
-    function readWalletState() {
-      try {
-        const savedPreferences = localStorage.getItem(walletSettingsKey);
-        if (savedPreferences) {
-          const parsedPreferences = JSON.parse(savedPreferences);
-          if (typeof parsedPreferences.rememberDevice !== "boolean" ||
-              typeof parsedPreferences.confirmRemoval !== "boolean") {
-            throw new Error("Saved wallet preferences are invalid.");
-          }
-          walletPreferences = {
-            rememberDevice: parsedPreferences.rememberDevice,
-            confirmRemoval: parsedPreferences.confirmRemoval
-          };
-        }
-
-        document.getElementById("preference-device").checked = walletPreferences.rememberDevice;
-        document.getElementById("preference-confirm-remove").checked = walletPreferences.confirmRemoval;
-
-        if (!walletPreferences.rememberDevice) return;
-
-        const savedMethods = localStorage.getItem(walletMethodsKey);
-        if (!savedMethods) return;
-        const parsedMethods = JSON.parse(savedMethods);
-        if (!Array.isArray(parsedMethods) || parsedMethods.some((method) =>
-          !method ||
-          typeof method.id !== "string" ||
-          typeof method.type !== "string" ||
-          typeof method.label !== "string" ||
-          typeof method.preferred !== "boolean"
-        )) {
-          throw new Error("Saved wallet method labels are invalid.");
-        }
-        walletMethods = parsedMethods;
-      } catch (error) {
-        console.error("Unable to load wallet preferences.", error);
-        throw new Error("Wallet settings could not be loaded from this browser.");
-      }
-    }
-
-    function saveWalletState() {
-      try {
-        localStorage.setItem(walletSettingsKey, JSON.stringify(walletPreferences));
-        if (walletPreferences.rememberDevice) {
-          localStorage.setItem(walletMethodsKey, JSON.stringify(walletMethods));
-        } else {
-          localStorage.removeItem(walletMethodsKey);
-        }
-      } catch (error) {
-        console.error("Unable to save wallet preferences.", error);
-        throw new Error("Wallet settings could not be saved. Check browser storage settings.");
-      }
-    }
-
-    function setWalletError(message) {
-      walletError.textContent = message;
-      walletError.hidden = !message;
-    }
-
-    function renderWalletMethods() {
-      walletMethodList.replaceChildren();
-      const count = walletMethods.length;
-      document.getElementById("payment-method-count").textContent =
-        `${count} saved ${count === 1 ? "method" : "methods"}`;
-
-      if (count === 0) {
-        const empty = document.createElement("div");
-        empty.className = "wallet-empty-methods";
-        empty.textContent = "No payment method labels yet. Add a label to organize your preferred ways to pay.";
-        walletMethodList.append(empty);
-        return;
+      function formatBalance(balance) {
+        return `₹${balance.toLocaleString("en-IN")}`;
       }
 
-      walletMethods.forEach((method) => {
-        const row = document.createElement("article");
-        row.className = "wallet-method";
-
-        const icon = document.createElement("span");
-        icon.className = "wallet-method-icon";
-        const iconElement = document.createElement("i");
-        iconElement.setAttribute("data-lucide", method.type.toLowerCase().includes("card") ? "credit-card" : "wallet");
-        iconElement.setAttribute("aria-hidden", "true");
-        icon.append(iconElement);
-
-        const details = document.createElement("div");
-        const label = document.createElement("h4");
-        label.className = "wallet-method-name";
-        label.textContent = method.label;
-        const type = document.createElement("p");
-        type.className = "wallet-method-type";
-        type.textContent = method.type;
-        details.append(label, type);
-
-        const actions = document.createElement("div");
-        actions.className = "wallet-method-actions";
-        if (method.preferred) {
-          const preferred = document.createElement("span");
-          preferred.className = "wallet-default";
-          preferred.textContent = "Preferred";
-          actions.append(preferred);
-        } else {
-          const preferredButton = document.createElement("button");
-          preferredButton.className = "wallet-button secondary";
-          preferredButton.type = "button";
-          preferredButton.dataset.walletAction = "preferred";
-          preferredButton.dataset.methodId = method.id;
-          preferredButton.textContent = "Set preferred";
-          actions.append(preferredButton);
+      function readBalance() {
+        let savedBalance;
+        try {
+          savedBalance = localStorage.getItem(balanceKey);
+        } catch (error) {
+          console.error("Unable to read the demo wallet balance.", error);
+          throw new Error("The demo balance could not be accessed. Check your browser storage settings.");
         }
+        if (savedBalance === null) return 0;
+        const balance = Number(savedBalance);
+        if (!Number.isSafeInteger(balance) || balance < 0) {
+          throw new Error("The saved demo balance is invalid.");
+        }
+        return balance;
+      }
 
-        const removeButton = document.createElement("button");
-        removeButton.className = "wallet-remove";
-        removeButton.type = "button";
-        removeButton.dataset.walletAction = "remove";
-        removeButton.dataset.methodId = method.id;
-        removeButton.setAttribute("aria-label", `Remove ${method.label}`);
-        const trashIcon = document.createElement("i");
-        trashIcon.setAttribute("data-lucide", "trash-2");
-        trashIcon.setAttribute("aria-hidden", "true");
-        removeButton.append(trashIcon);
-        actions.append(removeButton);
-        row.append(icon, details, actions);
-        walletMethodList.append(row);
-      });
+      function renderBalance() {
+        const balance = readBalance();
+        balanceElement.textContent = formatBalance(balance);
+        balanceDisplay.setAttribute("aria-label", `Available wallet balance: ${balance} rupees`);
+      }
 
-      lucide.createIcons();
-    }
+      function showStatus(message, isError = false) {
+        status.textContent = message;
+        status.dataset.error = String(isError);
+      }
 
-    collapseBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
-    });
-
-    function setActiveButton(button) {
-      document
-        .querySelectorAll(".nav button, .profile-button")
-        .forEach((item) => {
-          item.classList.remove("active");
-          item.removeAttribute("aria-current");
+      document.querySelectorAll("[data-wallet-amount]").forEach((button) => {
+        button.addEventListener("click", () => {
+          amountInput.value = button.dataset.walletAmount;
+          document.querySelectorAll("[data-wallet-amount]").forEach((choice) => {
+            choice.setAttribute("aria-pressed", String(choice === button));
+          });
         });
-      button.classList.add("active");
-      button.setAttribute("aria-current", "page");
-    }
+      });
 
-    document.querySelectorAll(".nav button").forEach((button) => {
-      button.addEventListener("click", () => {
-        setActiveButton(button);
+      amountInput.addEventListener("input", () => {
+        document.querySelectorAll("[data-wallet-amount]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.walletAmount === amountInput.value));
+        });
+      });
 
-        const page = (button.dataset.page || "").trim();
-        if (page) {
-          window.location.href = page;
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const amount = Number(amountInput.value);
+        if (!Number.isSafeInteger(amount) || amount < 10 || amount > 50000) {
+          showStatus("Enter a whole amount between ₹10 and ₹50,000.", true);
+          amountInput.focus();
+          return;
+        }
+
+        try {
+          const currentBalance = readBalance();
+          const nextBalance = currentBalance + amount;
+          if (!Number.isSafeInteger(nextBalance)) {
+            throw new Error("The demo balance limit has been reached.");
+          }
+          localStorage.setItem(balanceKey, String(nextBalance));
+          renderBalance();
+          window.dispatchEvent(new CustomEvent("shop-wallet-balance-updated", {
+            detail: { balance: nextBalance }
+          }));
+          showStatus(`${formatBalance(amount)} demo money added. No real payment was made.`);
+        } catch (error) {
+          console.error("Unable to update the demo wallet balance.", error);
+          showStatus(error.message || "The demo balance could not be updated.", true);
         }
       });
-    });
 
-    const currentPage = (window.location.pathname.split("/").pop() || "index.html").trim().toLowerCase();
-    const currentSidebarButton = [...document.querySelectorAll(".nav button")].find((button) => {
-      const page = (button.dataset.page || "").trim().toLowerCase();
-      return page === currentPage;
-    });
-
-    if (currentSidebarButton) {
-      setActiveButton(currentSidebarButton);
-    } else {
-      const homeButton = document.querySelector('.nav button[data-page="index.html"]');
-      if (homeButton) setActiveButton(homeButton);
-    }
-
-    document.querySelector(".profile-button").addEventListener("click", (event) => {
-      setActiveButton(event.currentTarget);
-      window.location.href = "login.html";
-    });
-
-    document.getElementById("add-method").addEventListener("click", () => {
-      document.getElementById("wallet-dialog-error").textContent = "";
-      walletForm.reset();
-      walletDialog.showModal();
-      document.getElementById("method-label").focus();
-    });
-
-    document.getElementById("cancel-method").addEventListener("click", () => walletDialog.close());
-
-    walletForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const type = document.getElementById("method-type").value;
-      const label = document.getElementById("method-label").value.trim();
-      const dialogError = document.getElementById("wallet-dialog-error");
-      if (!label) {
-        dialogError.textContent = "Enter a display label.";
-        return;
-      }
-      if (walletMethods.some((method) => method.type === type && method.label.toLowerCase() === label.toLowerCase())) {
-        dialogError.textContent = "That label is already saved for this payment type.";
-        return;
-      }
-
-      walletMethods.push({
-        id: crypto.randomUUID(),
-        type,
-        label,
-        preferred: walletMethods.length === 0
-      });
       try {
-        saveWalletState();
-        renderWalletMethods();
-        setWalletError("");
-        walletDialog.close();
+        renderBalance();
       } catch (error) {
-        console.error("Unable to add a wallet method label.", error);
-        walletMethods.pop();
-        dialogError.textContent = error.message;
+        console.error("Unable to load the wallet balance.", error);
+        showStatus(error.message, true);
       }
-    });
-
-    walletMethodList.addEventListener("click", (event) => {
-      const button = event.target.closest("button[data-wallet-action]");
-      if (!button) return;
-      const method = walletMethods.find((item) => item.id === button.dataset.methodId);
-      if (!method) return;
-
-      if (button.dataset.walletAction === "remove" && walletPreferences.confirmRemoval &&
-          !window.confirm(`Remove "${method.label}" from your saved labels?`)) {
-        return;
-      }
-
-      const previousMethods = walletMethods;
-      if (button.dataset.walletAction === "preferred") {
-        walletMethods = walletMethods.map((item) => ({ ...item, preferred: item.id === method.id }));
-      } else if (button.dataset.walletAction === "remove") {
-        walletMethods = walletMethods.filter((item) => item.id !== method.id);
-        if (!walletMethods.some((item) => item.preferred) && walletMethods.length > 0) {
-          walletMethods[0].preferred = true;
+      window.addEventListener("storage", (event) => {
+        if (event.key !== balanceKey) return;
+        try {
+          renderBalance();
+        } catch (error) {
+          console.error("Unable to refresh the wallet balance.", error);
+          showStatus(error.message, true);
         }
-      } else {
-        return;
-      }
+      });
 
-      try {
-        saveWalletState();
-        renderWalletMethods();
-        setWalletError("");
-      } catch (error) {
-        console.error("Unable to update wallet method labels.", error);
-        walletMethods = previousMethods;
-        setWalletError(error.message);
-        renderWalletMethods();
-      }
-    });
-
-    document.getElementById("preference-device").addEventListener("change", (event) => {
-      const previousValue = walletPreferences.rememberDevice;
-      walletPreferences.rememberDevice = event.currentTarget.checked;
-      try {
-        saveWalletState();
-        if (!walletPreferences.rememberDevice) walletMethods = [];
-        renderWalletMethods();
-        setWalletError("");
-      } catch (error) {
-        console.error("Unable to update the wallet storage preference.", error);
-        walletPreferences.rememberDevice = previousValue;
-        event.currentTarget.checked = previousValue;
-        setWalletError(error.message);
-      }
-    });
-
-    document.getElementById("preference-confirm-remove").addEventListener("change", (event) => {
-      const previousValue = walletPreferences.confirmRemoval;
-      walletPreferences.confirmRemoval = event.currentTarget.checked;
-      try {
-        saveWalletState();
-        setWalletError("");
-      } catch (error) {
-        console.error("Unable to update the wallet confirmation preference.", error);
-        walletPreferences.confirmRemoval = previousValue;
-        event.currentTarget.checked = previousValue;
-        setWalletError(error.message);
-      }
-    });
-
-    try {
-      readWalletState();
-      renderWalletMethods();
-    } catch (error) {
-      setWalletError(error.message);
-      renderWalletMethods();
-    }
-
-    // Initialize Lucide icons
-    lucide.createIcons();
+      window.lucide?.createIcons();
+    })();
   </script>
   <script src="site-sidebar.js"></script>
 </body>

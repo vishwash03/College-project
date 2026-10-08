@@ -12,13 +12,22 @@
     :root {
       --content-offset: 112px;
       --header-top: 24px;
-      --header-height: 134px;
+      --header-height: 160px;
       --header-clearance: 12px;
       scroll-padding-top: calc(var(--header-top) + var(--header-height) + var(--header-clearance));
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar {
+      display: none;
     }
 
     body {
@@ -40,7 +49,7 @@
       width: calc(100% - var(--content-offset));
       margin-left: var(--content-offset);
       min-height: 100vh;
-      padding: 150px 0 32px;
+      padding: calc(var(--header-top) + var(--header-height)) 0 32px;
     }
 
     .content {
@@ -79,6 +88,14 @@
       text-align: center;
     }
 
+    .header-logo {
+      display: block;
+      width: min(160px, 100%);
+      height: auto;
+      max-height: 60px;
+      margin: 0 auto;
+    }
+
     .header h4 {
       width: 100%;
       margin: 4px 0 0;
@@ -107,14 +124,12 @@
       overflow-y: hidden;
       padding: 0 4px;
       scroll-behavior: smooth;
-      border: 1px solid #e8d4c8;
-      border-radius: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #be8282 #f5e6d3;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
     .nav-tabs::-webkit-scrollbar {
-      height: 6px;
+      display: none;
     }
 
     .nav-tabs::-webkit-scrollbar-track {
@@ -159,7 +174,7 @@
       :root {
         --content-offset: 80px;
         --header-top: 12px;
-        --header-height: 134px;
+        --header-height: 160px;
       }
 
       body:has(.sidebar:not(.collapsed)) {
@@ -198,7 +213,7 @@
       .main-content {
         width: calc(100% - var(--content-offset));
         margin-left: var(--content-offset);
-        padding: 150px 0 24px;
+        padding: calc(var(--header-top) + var(--header-height)) 0 24px;
       }
 
       .header h1 {
@@ -226,10 +241,9 @@
         font-size: 12px;
       }
 
-      .products-container {
-        grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      .main-content .content > .home-product-row {
         gap: 8px;
-        margin-top: 16px;
+        margin-top: 0;
       }
     }
 
@@ -509,6 +523,65 @@
             gap: 12px;
             margin-top: 32px;
         }
+            .main-content .content > .home-product-row {
+                display: flex;
+                width: 100%;
+                gap: 10px;
+                margin: 0 0 28px;
+                padding: 0 0 6px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .main-content .content > .section-title {
+                width: 100%;
+                max-width: none;
+                margin-right: 0;
+                margin-left: 0;
+            }
+            .home-product-row::-webkit-scrollbar { display: none; }
+            .home-product-row .card {
+                flex: 0 0 172px;
+                width: 172px;
+                min-width: 172px;
+            }
+            .home-product-row .card .card-content {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                grid-template-rows: minmax(32px, auto) auto auto 1fr auto;
+                align-content: stretch;
+                align-items: start;
+                gap: 5px 8px;
+            }
+            .home-product-row .card .card-content h3 {
+                min-height: 32px;
+                margin: 0;
+                flex: initial;
+            }
+            .home-product-row .card .price-section {
+                min-height: 0;
+                margin: 0;
+                padding: 0;
+                flex: initial;
+            }
+            .home-product-row .card .brand-badge,
+            .home-product-row .card .product-size,
+            .home-product-row .card .quantity-control,
+            .home-product-row .card .add-to-cart {
+                grid-column: 1 / -1;
+                margin-top: 0;
+                flex: initial;
+            }
+            .home-product-row .card .brand-badge { margin-bottom: 0; }
+            .home-product-row .card .product-size { min-height: 12px; }
+            .home-product-row .card .quantity-control { width: fit-content; }
+            .home-product-row .card .add-to-cart { align-self: end; }
+            .home-product-row .card .card-image img {
+                padding: 8px;
+                object-fit: contain;
+                background: #fff;
+            }
             .section-title {
                 margin: 28px 0 12px;
                 padding-bottom: 8px;
@@ -898,7 +971,7 @@
   <main class="main-content">
     <div class="content">
       <div class="header">
-        <h1>NAME</h1>
+        <h1><img class="header-logo" src="logo/sameep-animated.svg" alt="Sameep / समीप"></h1>
         <h4>Location:------------</h4>
         <hr class="divider" />
         <nav class="nav-tabs">
@@ -1293,7 +1366,7 @@
     </div>
   </main>
   <script src="cart-storage.js"></script>
-  <script src="additional-products.js"></script>
+  <script src="home-products.js"></script>
   <script>
     const sidebar = document.querySelector(".sidebar");
     const collapseBtn = document.getElementById("collapseBtn");
@@ -1339,20 +1412,47 @@
 
     document.querySelector(".profile-button").addEventListener("click", (event) => {
       setActiveButton(event.currentTarget);
-      window.location.href = "login.html";
+      window.location.href = "profile.html";
     });
 
-    // Toggle wishlist state for product heart icon
+    function getCardProduct(card) {
+      const priceText = card.querySelector(".price-sale, .price")?.textContent || "";
+      const price = Number(priceText.replace(/[^\d.]/g, ""));
+      return {
+        name: card.querySelector(".card-content h3")?.textContent.trim(),
+        price,
+        image: card.querySelector(".card-image img")?.src || "",
+        brand: card.querySelector(".brand-badge")?.textContent.trim() || "",
+        size: card.querySelector(".product-size")?.textContent.trim() || ""
+      };
+    }
+
+    // Save favorites so they are available from the profile wishlist.
     document.querySelectorAll(".star-icon").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        btn.classList.toggle("active");
+        const card = btn.closest(".card");
+        try {
+          const saved = window.ShopWishlist.toggle(getCardProduct(card));
+          btn.classList.toggle("active", saved);
+          btn.setAttribute("aria-pressed", String(saved));
+        } catch (error) {
+          console.error("Wishlist update failed.", error);
+          window.alert(error.message);
+        }
       });
     });
 
     function showCartError(error) {
       console.error("Shopping cart update failed.", error);
+      window.alert(error.message);
+    }
+
+    try {
+      window.ShopWishlist.syncButtons();
+    } catch (error) {
+      console.error("Unable to restore wishlist state.", error);
       window.alert(error.message);
     }
 

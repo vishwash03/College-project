@@ -11,7 +11,7 @@
     :root {
       --content-offset: 112px;
       --header-top: 24px;
-      --header-height: 134px;
+      --header-height: 160px;
     }
 
     * {
@@ -29,7 +29,7 @@
     .main-content {
       width: calc(100vw - var(--content-offset));
       min-height: 100vh;
-      padding: 150px 0 32px;
+      padding: calc(var(--header-top) + var(--header-height)) 0 32px;
     }
 
     .header {
@@ -61,6 +61,14 @@
       font-size: 28px;
     }
 
+    .header-logo {
+      display: block;
+      width: min(160px, 100%);
+      height: auto;
+      max-height: 60px;
+      margin: 0 auto;
+    }
+
     .header h4 {
       margin-top: 4px;
       color: #8b7b77;
@@ -85,11 +93,10 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding: 0 4px;
-      border: 1px solid #e8d4c8;
-      border-radius: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #be8282 #f5e6d3;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
+    .nav-tabs::-webkit-scrollbar { display: none; }
 
     .nav-tabs a {
       flex: 0 0 auto;
@@ -169,7 +176,7 @@
   <main class="main-content">
     <div class="content">
       <header class="header">
-        <h1>NAME</h1>
+        <h1><img class="header-logo" src="logo/sameep-animated.svg" alt="Sameep / समीप"></h1>
         <h4>Location:------------</h4>
         <hr class="header-divider">
         <nav class="nav-tabs" aria-label="Main categories"></nav>

@@ -104,6 +104,7 @@
     favorite.className = "star-icon";
     favorite.type = "button";
     favorite.setAttribute("aria-label", `Add ${product.name} to wishlist`);
+    favorite.setAttribute("aria-pressed", "false");
     const heart = document.createElement("i");
     heart.dataset.lucide = "heart";
     heart.setAttribute("aria-hidden", "true");
@@ -174,6 +175,13 @@
   });
 
   oldGrid.replaceWith(productRow);
+  if (window.ShopWishlist) {
+    try {
+      window.ShopWishlist.syncButtons(productRow);
+    } catch (error) {
+      console.error("Unable to restore wishlist state for this collection.", error);
+    }
+  }
 
   function showCartError(error) {
     console.error("Collection cart update failed.", error);
@@ -190,8 +198,21 @@
     const addButton = card.querySelector(".add-to-cart");
 
     if (button.classList.contains("star-icon")) {
-      button.classList.toggle("active");
-      button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+      if (!window.ShopWishlist) {
+        showCartError(new Error("Wishlist services are unavailable. Reload the page and try again."));
+        return;
+      }
+      try {
+        window.ShopWishlist.toggle({
+          name: product.name,
+          price: product.price,
+          image: card.querySelector(".card-image img").src,
+          brand: product.brand,
+          size: product.size
+        });
+      } catch (error) {
+        showCartError(error);
+      }
       return;
     }
     if (!window.ShopCart) {

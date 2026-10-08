@@ -3,10 +3,301 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fcf8f2">
   <title>Checkout</title>
   <link rel="stylesheet" href="site-sidebar.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --ink: #3a3330;
+      --muted: #80736f;
+      --border: #e8d4c8;
+      --accent: #a0636b;
+      --wash: #f5e6d3;
+    }
+    * { box-sizing: border-box; }
+    body { padding: 0; }
+    .checkout-page { width: min(100%, 980px); margin: 0 auto; padding: 32px 36px 48px; }
+    .checkout-heading { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .checkout-heading h1 { margin: 0; font-size: 26px; }
+    .checkout-back {
+      display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center;
+      color: var(--ink); background: #fff; border: 1px solid var(--border); border-radius: 50%;
+      text-decoration: none;
+    }
+    .checkout-back svg { width: 19px; height: 19px; }
+    .checkout-intro { margin: -12px 0 20px 54px; color: var(--muted); font-size: 14px; }
+    .checkout-notice, .checkout-error {
+      margin-bottom: 18px; padding: 12px 14px; border-radius: 10px; font-size: 13px; line-height: 1.5;
+    }
+    .checkout-notice { color: #705852; background: #f8eee8; border: 1px solid var(--border); }
+    .checkout-error { color: #8b2635; background: #fff1f2; border: 1px solid #f0c7cd; }
+    .checkout-layout { display: grid; grid-template-columns: minmax(0, 1fr) 310px; align-items: start; gap: 18px; }
+    .checkout-card {
+      min-width: 0; margin-bottom: 16px; padding: 22px; background: rgba(255,255,255,.84);
+      border: 1px solid var(--border); border-radius: 15px; box-shadow: 0 6px 20px rgba(86,62,48,.05);
+    }
+    .checkout-card h2 { margin: 0 0 16px; font-size: 17px; }
+    .checkout-form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+    .checkout-field { display: grid; min-width: 0; gap: 6px; }
+    .checkout-field-wide { grid-column: 1 / -1; }
+    .checkout-field label { font-size: 13px; font-weight: 700; }
+    .checkout-field input, .checkout-field select, .checkout-field textarea {
+      width: 100%; min-height: 44px; padding: 10px 12px; color: var(--ink); background: #fff;
+      border: 1px solid var(--border); border-radius: 9px; font: inherit; font-size: 14px;
+    }
+    .checkout-field textarea { min-height: 76px; resize: vertical; }
+    .checkout-field input:focus, .checkout-field select:focus, .checkout-field textarea:focus {
+      border-color: var(--accent); outline: 2px solid rgba(160,99,107,.16);
+    }
+    .checkout-summary { position: sticky; top: 20px; }
+    .checkout-items { display: grid; gap: 12px; margin-bottom: 16px; }
+    .checkout-item { display: grid; grid-template-columns: 54px minmax(0,1fr) auto; align-items: center; gap: 10px; }
+    .checkout-item img { width: 54px; height: 54px; object-fit: cover; background: #f8eee5; border: 1px solid var(--border); border-radius: 8px; }
+    .checkout-item-name { margin: 0 0 4px; font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+    .checkout-item-meta { margin: 0; color: var(--muted); font-size: 11px; }
+    .checkout-item-price { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .checkout-total-row { display: flex; justify-content: space-between; gap: 12px; margin: 12px 0; color: var(--muted); font-size: 13px; }
+    .checkout-grand-total { padding-top: 14px; color: var(--ink); border-top: 1px solid var(--border); font-size: 15px; font-weight: 700; }
+    .checkout-button {
+      display: inline-flex; width: 100%; min-height: 44px; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 14px; color: #fff; background: var(--accent); border: 1px solid var(--accent);
+      border-radius: 9px; font: inherit; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer;
+    }
+    .checkout-button:hover { background: #8b5563; }
+    .checkout-button:focus-visible, .checkout-back:focus-visible { outline: 3px solid #d6a6a5; outline-offset: 2px; }
+    .checkout-terms { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; text-align: center; }
+    .checkout-empty { padding: 24px; background: #fff; border: 1px solid var(--border); border-radius: 14px; text-align: center; }
+    .checkout-empty h2 { margin: 0 0 8px; font-size: 18px; }
+    .checkout-empty p { color: var(--muted); font-size: 13px; }
+    .checkout-empty a { color: var(--accent); font-weight: 700; }
+    [hidden] { display: none !important; }
+    @media (max-width: 800px) { .checkout-layout { grid-template-columns: minmax(0,1fr) 270px; gap: 12px; } .checkout-page { padding-right: 24px; } }
+    @media (max-width: 700px) {
+      body.site-sidebar-no-legacy { padding-left: 80px !important; }
+      .checkout-page { padding: 24px 14px 32px 0; }
+      .checkout-heading h1 { font-size: 22px; }
+      .checkout-layout { grid-template-columns: 1fr; }
+      .checkout-summary { position: static; grid-row: 1; }
+      .checkout-card { padding: 17px; }
+    }
+    @media (max-width: 380px) { body.site-sidebar-no-legacy { padding-left: 68px !important; } }
+  </style>
 </head>
 <body class="site-sidebar-empty-page">
+  <main class="checkout-page">
+    <header class="checkout-heading">
+      <a class="checkout-back" href="cart.html" aria-label="Back to cart"><i data-lucide="arrow-left" aria-hidden="true"></i></a>
+      <h1>Checkout</h1>
+    </header>
+    <p class="checkout-intro">Confirm your delivery details and review your order.</p>
+    <div class="checkout-notice" role="note">Demo checkout: orders are saved in this browser only. No payment is collected and no real order is sent to a store.</div>
+    <div id="checkout-error" class="checkout-error" role="alert" hidden></div>
+    <div id="checkout-empty" class="checkout-empty" hidden>
+      <h2>Your cart is empty</h2>
+      <p>Add some products before continuing to checkout.</p>
+      <a href="index.html">Browse products</a>
+    </div>
+    <div id="checkout-layout" class="checkout-layout" hidden>
+      <form id="checkout-form" novalidate>
+        <section class="checkout-card" aria-labelledby="delivery-heading">
+          <h2 id="delivery-heading">Delivery details</h2>
+          <div id="saved-address-field" class="checkout-field checkout-field-wide" hidden>
+            <label for="saved-address">Use a saved address</label>
+            <select id="saved-address"><option value="">Enter a new address</option></select>
+          </div>
+          <div class="checkout-form">
+            <div class="checkout-field checkout-field-wide">
+              <label for="delivery-name">Full name</label>
+              <input id="delivery-name" name="name" autocomplete="name" maxlength="80" required>
+            </div>
+            <div class="checkout-field">
+              <label for="delivery-phone">Phone number</label>
+              <input id="delivery-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="18" required>
+            </div>
+            <div class="checkout-field">
+              <label for="delivery-postal">PIN code</label>
+              <input id="delivery-postal" name="postal" autocomplete="postal-code" inputmode="numeric" maxlength="6" required>
+            </div>
+            <div class="checkout-field checkout-field-wide">
+              <label for="delivery-line">Address</label>
+              <textarea id="delivery-line" name="line" autocomplete="street-address" maxlength="240" required></textarea>
+            </div>
+            <div class="checkout-field">
+              <label for="delivery-city">City</label>
+              <input id="delivery-city" name="city" autocomplete="address-level2" maxlength="80" required>
+            </div>
+            <div class="checkout-field">
+              <label for="delivery-state">State</label>
+              <input id="delivery-state" name="state" autocomplete="address-level1" maxlength="80" required>
+            </div>
+          </div>
+        </section>
+        <section class="checkout-card" aria-labelledby="payment-heading">
+          <h2 id="payment-heading">Payment</h2>
+          <div class="checkout-field">
+            <label for="payment-method">Payment method</label>
+            <select id="payment-method" name="payment">
+              <option value="Cash on delivery (demo)">Cash on delivery (demo)</option>
+            </select>
+          </div>
+          <p class="checkout-terms">This demo does not collect payment details or process a transaction.</p>
+        </section>
+      </form>
+      <aside class="checkout-summary checkout-card" aria-labelledby="summary-heading">
+        <h2 id="summary-heading">Order summary</h2>
+        <div id="checkout-items" class="checkout-items"></div>
+        <div class="checkout-total-row"><span>Subtotal</span><strong id="checkout-subtotal"></strong></div>
+        <div class="checkout-total-row"><span>Delivery</span><strong id="checkout-delivery"></strong></div>
+        <div class="checkout-total-row checkout-grand-total"><span>Total</span><strong id="checkout-total"></strong></div>
+        <button id="place-order" class="checkout-button" type="submit" form="checkout-form"><i data-lucide="package-check" aria-hidden="true"></i>Place demo order</button>
+        <p class="checkout-terms">No real payment or order submission occurs.</p>
+      </aside>
+    </div>
+  </main>
+  <script src="cart-storage.js"></script>
+  <script src="orders-storage.js"></script>
+  <script>
+    (() => {
+      const form = document.getElementById("checkout-form");
+      const error = document.getElementById("checkout-error");
+      const subtotalElement = document.getElementById("checkout-subtotal");
+      let cartItems = [];
+      let subtotal = 0;
+      const formatPrice = (amount) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(amount);
+      const savedAddressField = document.getElementById("saved-address-field");
+      const savedAddressSelect = document.getElementById("saved-address");
+
+      function loadSavedAddresses() {
+        let serialized;
+        try {
+          serialized = localStorage.getItem("quickcart-saved-addresses");
+        } catch (storageError) {
+          console.error("Unable to read saved delivery addresses.", storageError);
+          throw new Error("Saved addresses could not be accessed. You can still enter an address manually.");
+        }
+        if (!serialized) return [];
+        const addresses = JSON.parse(serialized);
+        if (!Array.isArray(addresses) || addresses.some((address) =>
+          !address || typeof address.name !== "string" || typeof address.phone !== "string" ||
+          typeof address.line !== "string" || typeof address.city !== "string" ||
+          typeof address.state !== "string" || typeof address.postal !== "string"
+        )) throw new Error("Saved address data is invalid.");
+        return addresses;
+      }
+
+      function setAddress(address) {
+        ["name", "phone", "line", "city", "state", "postal"].forEach((field) => {
+          form.elements[field].value = address?.[field] || "";
+        });
+      }
+
+      function showError(message) {
+        error.textContent = message;
+        error.hidden = false;
+      }
+
+      try {
+        cartItems = ShopCart.getItems();
+        if (!cartItems.length) {
+          document.getElementById("checkout-empty").hidden = false;
+          return;
+        }
+        document.getElementById("checkout-layout").hidden = false;
+        subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        if (!Number.isFinite(subtotal) || subtotal < 0) throw new Error("Your cart total is invalid.");
+        const delivery = subtotal >= 499 ? 0 : 40;
+        document.getElementById("checkout-items").replaceChildren(...cartItems.map((item) => {
+          const row = document.createElement("div");
+          row.className = "checkout-item";
+          const image = document.createElement("img");
+          image.src = item.image || "image/p1.jpeg";
+          image.alt = "";
+          const details = document.createElement("div");
+          const name = document.createElement("p");
+          name.className = "checkout-item-name";
+          name.textContent = item.name;
+          const quantity = document.createElement("p");
+          quantity.className = "checkout-item-meta";
+          quantity.textContent = `Qty: ${item.quantity}`;
+          details.append(name, quantity);
+          const price = document.createElement("span");
+          price.className = "checkout-item-price";
+          price.textContent = formatPrice(item.price * item.quantity);
+          row.append(image, details, price);
+          return row;
+        }));
+        subtotalElement.textContent = formatPrice(subtotal);
+        document.getElementById("checkout-delivery").textContent = delivery ? formatPrice(delivery) : "Free";
+        document.getElementById("checkout-total").textContent = formatPrice(subtotal + delivery);
+
+        const addresses = loadSavedAddresses();
+        if (addresses.length) {
+          savedAddressField.hidden = false;
+          addresses.forEach((address, index) => {
+            const option = document.createElement("option");
+            option.value = String(index);
+            option.textContent = `${address.name} · ${address.type || "Address"} · ${address.postal}`;
+            savedAddressSelect.append(option);
+          });
+          const preferredAddress = Math.max(0, addresses.findIndex((address) => address.default));
+          savedAddressSelect.value = String(preferredAddress);
+          setAddress(addresses[preferredAddress]);
+        }
+      } catch (loadError) {
+        console.error("Unable to prepare checkout.", loadError);
+        showError(loadError.message || "Checkout could not be loaded.");
+      }
+
+      savedAddressSelect.addEventListener("change", () => {
+        try {
+          const addresses = loadSavedAddresses();
+          const selected = savedAddressSelect.value;
+          setAddress(selected === "" ? null : addresses[Number(selected)]);
+        } catch (loadError) {
+          showError(loadError.message);
+        }
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        try {
+          const phone = form.elements.phone.value.trim();
+          const digits = phone.replace(/\D/g, "").length;
+          if (!/^[0-9+() -]{7,18}$/.test(phone) || digits < 7 || digits > 15) {
+            throw new Error("Enter a valid phone number with 7 to 15 digits.");
+          }
+          const postal = form.elements.postal.value.trim();
+          if (!/^\d{6}$/.test(postal)) throw new Error("Enter a valid 6-digit PIN code.");
+          const delivery = subtotal >= 499 ? 0 : 40;
+          const address = {
+            name: form.elements.name.value.trim(),
+            phone,
+            line: form.elements.line.value.trim(),
+            city: form.elements.city.value.trim(),
+            state: form.elements.state.value.trim(),
+            postal
+          };
+          if (Object.values(address).some((value) => !value)) throw new Error("Complete all delivery details.");
+          const order = ShopOrders.create({
+            items: cartItems.map(({ name, price, quantity, image, brand, size }) => ({ name, price, quantity, image, brand, size })),
+            subtotal,
+            delivery,
+            total: subtotal + delivery,
+            address,
+            payment: form.elements.payment.value
+          });
+          ShopCart.clear();
+          window.location.href = `order-tracking.html?id=${encodeURIComponent(order.id)}`;
+        } catch (submitError) {
+          console.error("Unable to place demo order.", submitError);
+          showError(submitError.message || "Your demo order could not be placed.");
+        }
+      });
+      window.lucide?.createIcons();
+    })();
+  </script>
   <script src="site-sidebar.js"></script>
 </body>
 </html>

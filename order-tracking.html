@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fcf8f2">
+  <title>Track Order</title>
+  <link rel="stylesheet" href="site-sidebar.css">
+  <link rel="stylesheet" href="account-pages.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .tracking-demo-notice {
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      color: #705852;
+      background: #f8eee8;
+      border: 1px solid var(--account-border);
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .tracking-overview {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .tracking-overview h2 { margin-bottom: 7px; }
+    .tracking-order-id { color: var(--account-muted); font-size: 13px; overflow-wrap: anywhere; }
+    .tracking-status { flex: 0 0 auto; }
+    .tracking-progress {
+      display: grid;
+      gap: 0;
+      margin: 4px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .tracking-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 32px minmax(0,1fr);
+      gap: 12px;
+      min-height: 68px;
+    }
+    .tracking-step:not(:last-child)::before {
+      position: absolute;
+      top: 30px;
+      bottom: -4px;
+      left: 15px;
+      width: 2px;
+      content: "";
+      background: #e8d4c8;
+    }
+    .tracking-step.is-complete:not(:last-child)::before { background: #a0636b; }
+    .tracking-marker {
+      z-index: 1;
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      color: var(--account-muted);
+      background: #fff;
+      border: 2px solid #e8d4c8;
+      border-radius: 50%;
+    }
+    .tracking-step.is-complete .tracking-marker {
+      color: #fff;
+      background: #a0636b;
+      border-color: #a0636b;
+    }
+    .tracking-marker svg { width: 16px; height: 16px; }
+    .tracking-step-copy { padding: 5px 0 16px; }
+    .tracking-step-copy strong { display: block; font-size: 14px; }
+    .tracking-step-copy span { display: block; margin-top: 4px; color: var(--account-muted); font-size: 12px; }
+    .tracking-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; font-size: 13px; }
+    .tracking-item + .tracking-item { margin-top: 11px; }
+    .tracking-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tracking-feedback { min-height: 20px; margin: 12px 0 0; color: #a13d36; font-size: 13px; }
+    @media (max-width: 600px) {
+      .account-page { padding: 24px 18px 32px; }
+      .account-card { padding: 18px; }
+      .tracking-overview { flex-direction: column; }
+    }
+  </style>
+</head>
+<body class="site-sidebar-empty-page account-page-body">
+  <main class="account-page">
+    <header class="account-heading">
+      <a class="account-back" href="orderhistory.html" aria-label="Back to orders"><i data-lucide="arrow-left" aria-hidden="true"></i></a>
+      <h1>Track order</h1>
+    </header>
+    <p class="account-intro">View the saved status of your demo order.</p>
+    <div id="tracking-content"></div>
+  </main>
+  <script src="orders-storage.js"></script>
+  <script>
+    (() => {
+      const root = document.getElementById("tracking-content");
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get("id");
+      const formatPrice = (amount) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(amount);
+
+      function node(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      }
+
+      function render() {
+        root.replaceChildren();
+        let order;
+        try {
+          order = orderId ? window.ShopOrders.getById(orderId) : null;
+        } catch (error) {
+          console.error("Unable to load order tracking.", error);
+          root.append(node("p", "tracking-feedback", error.message));
+          return;
+        }
+        if (!order) {
+          const empty = node("section", "account-card account-empty");
+          empty.append(node("h2", "", "Order not found"), node("p", "", "This demo order is unavailable in this browser. Open Your Orders to select another order."));
+          const link = node("a", "account-button", "View your orders");
+          link.href = "orderhistory.html";
+          empty.append(link);
+          root.append(empty);
+          return;
+        }
+
+        const notice = node("p", "tracking-demo-notice",
+          "Demo tracking only: these statuses are simulated in this browser. There are no live carrier updates or real shipment.");
+        root.append(notice);
+
+        const overview = node("section", "account-card tracking-overview");
+        const overviewCopy = document.createElement("div");
+        overviewCopy.append(node("h2", "", `Order ${order.id}`));
+        overviewCopy.append(node("p", "tracking-order-id", `Placed ${new Date(order.createdAt).toLocaleString("en-IN")}`));
+        const status = node("span", "account-badge tracking-status", window.ShopOrders.statuses[order.statusIndex]);
+        overview.append(overviewCopy, status);
+        root.append(overview);
+
+        const progressCard = node("section", "account-card");
+        progressCard.append(node("h2", "", "Order progress"));
+        const progress = node("ol", "tracking-progress");
+        window.ShopOrders.statuses.forEach((label, index) => {
+          const step = node("li", `tracking-step${index <= order.statusIndex ? " is-complete" : ""}`);
+          const marker = node("span", "tracking-marker");
+          const icon = document.createElement("i");
+          icon.dataset.lucide = index <= order.statusIndex ? "check" : "circle";
+          icon.setAttribute("aria-hidden", "true");
+          marker.append(icon);
+          const copy = node("div", "tracking-step-copy");
+          copy.append(node("strong", "", label));
+          const history = Array.isArray(order.statusHistory) ? order.statusHistory.find((entry) => entry.status === label) : null;
+          copy.append(node("span", "", history ? new Date(history.at).toLocaleString("en-IN") : "Not reached"));
+          step.append(marker, copy);
+          progress.append(step);
+        });
+        progressCard.append(progress);
+        root.append(progressCard);
+
+        const details = node("section", "account-card");
+        details.append(node("h2", "", "Items and total"));
+        order.items.forEach((item) => {
+          const row = node("div", "tracking-item");
+          row.append(node("span", "", `${item.name} × ${item.quantity}`));
+          row.append(node("strong", "", formatPrice(item.price * item.quantity)));
+          details.append(row);
+        });
+        details.append(node("p", "account-list-copy", `Delivery: ${order.address.name}, ${order.address.line}, ${order.address.city}, ${order.address.state} ${order.address.postal} · ${order.address.phone}`));
+        details.append(node("p", "account-list-copy", `Payment: ${order.payment} · Total: ${formatPrice(order.total)} (demo)`));
+        root.append(details);
+
+        const actions = node("div", "tracking-actions");
+        const advanceButton = node("button", "account-button", order.statusIndex < window.ShopOrders.statuses.length - 1 ? "Advance demo tracking" : "Demo tracking complete");
+        advanceButton.type = "button";
+        advanceButton.disabled = order.statusIndex >= window.ShopOrders.statuses.length - 1;
+        advanceButton.addEventListener("click", () => {
+          try {
+            window.ShopOrders.advance(order.id);
+            render();
+          } catch (error) {
+            const feedback = root.querySelector(".tracking-feedback");
+            if (feedback) feedback.textContent = error.message;
+            else root.append(node("p", "tracking-feedback", error.message));
+          }
+        });
+        const ordersLink = node("a", "account-button account-button-secondary", "Back to your orders");
+        ordersLink.href = "orderhistory.html";
+        actions.append(advanceButton, ordersLink);
+        root.append(actions);
+
+        window.lucide?.createIcons({ attrs: { "aria-hidden": "true" } });
+      }
+      render();
+    })();
+  </script>
+  <script src="site-sidebar.js"></script>
+</body>
+</html>

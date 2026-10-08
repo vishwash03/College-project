@@ -220,7 +220,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 134px;
+      height: 160px;
       padding: 4px 24px;
       background: #ffffff;
       border: 1px solid #e8d4c8;
@@ -228,11 +228,24 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
-    h1 {
+    .explore-logo {
+      display: block;
+      width: min(160px, 100%);
+      height: auto;
+      max-height: 60px;
+      margin: 0 auto;
+    }
+
+    .explore-divider {
+      width: 100%;
+      margin: 14px 0 8px;
+    }
+
+    .explore-header h1 {
       width: 100%;
       margin: 0;
       color: #3a3330;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       text-align: center;
     }
@@ -260,78 +273,6 @@
 
     .github-link:hover {
       background: #f1e4d3;
-    }
-
-    .subtitle {
-      width: 100%;
-      margin: 2px 0 0;
-      color: #8b7b77;
-      text-align: center;
-    }
-
-    .header-divider {
-      width: 100%;
-      margin: 10px 0 6px;
-      border: 0;
-      border-top: 1px solid #e8d4c8;
-    }
-
-    .nav-tabs {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      height: 40px;
-      min-height: 40px;
-      flex: 0 0 40px;
-      overflow-x: auto;
-      padding: 0 4px;
-      border: 1px solid #e8d4c8;
-      border-radius: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #be8282 #f5e6d3;
-    }
-
-    .nav-tabs::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .nav-tabs::-webkit-scrollbar-track {
-      background: #f5e6d3;
-      border-radius: 999px;
-    }
-
-    .nav-tabs::-webkit-scrollbar-thumb {
-      background: #be8282;
-      border-radius: 999px;
-    }
-
-    .nav-tabs a {
-      flex: 0 0 auto;
-      padding: 6px 10px;
-      border-right: 1px solid #e8d4c8;
-      border-radius: 8px;
-      color: #8b7b77;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .nav-tabs a:hover,
-    .nav-tabs a.active {
-      background: #f1e4d3;
-      color: #3a3330;
-    }
-
-    .nav-tabs a:last-child {
-      border-right: 0;
-    }
-
-    .nav-tabs a:focus-visible {
-      outline: 2px solid #8b5563;
-      outline-offset: -2px;
     }
 
     @media (max-width: 600px) {
@@ -387,11 +328,15 @@
 
       .explore-header {
         width: calc(100vw - 104px);
-        height: 134px;
+        height: 160px;
         padding: 8px 10px;
       }
 
-      h1 {
+      .explore-logo {
+        width: min(160px, 100%);
+      }
+
+      .explore-header h1 {
         font-size: 22px;
       }
 
@@ -402,20 +347,6 @@
         font-size: 11px;
       }
 
-      .subtitle {
-        font-size: 13px;
-      }
-
-      .nav-tabs {
-        height: 40px;
-        min-height: 40px;
-        flex-basis: 40px;
-      }
-
-      .nav-tabs a {
-        padding: 5px 8px;
-        font-size: 12px;
-      }
     }
   </style>
   <link rel="stylesheet" href="site-sidebar.css">
@@ -449,24 +380,12 @@
   </aside>
   <main>
     <header class="explore-header">
-      <a class="explore-title" href="index.html"><h1>Explore</h1></a>
-      <p class="subtitle">Browse shops and products by category</p>
-      <hr class="header-divider" />
+      <a class="explore-title" href="index.html" aria-label="Sameep home"><img class="explore-logo" src="logo/sameep-animated.svg" alt="Sameep / समीप"></a>
+      <hr class="explore-divider" aria-hidden="true">
+      <h1>Explore</h1>
       <a class="github-link" href="https://github.com/vishwash03" target="_blank" rel="noopener noreferrer">
         GitHub <span aria-hidden="true">↗</span>
       </a>
-      <nav class="nav-tabs" aria-label="Explore categories">
-        <a href="categories.html" class="active" aria-current="page">🧭 Explore</a>
-        <a href="index.html">🛍️ All</a>
-        <a href="cafe.html">☕ Cafe</a>
-        <a href="index.html">🏠 Home</a>
-        <a href="toys.html">🎮 Toys</a>
-        <a href="fresh.html">🥬 Fresh</a>
-        <a href="electronics.html">🎧 Electronics</a>
-        <a href="mobiles.html">📱 Mobiles</a>
-        <a href="beauty.html">💄 Beauty</a>
-        <a href="fashion.html">👗 Fashion</a>
-      </nav>
     </header>
   </main>
   <script>

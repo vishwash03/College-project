@@ -58,6 +58,10 @@
   margin: 48px 0 0;
 }
 
+.site-sidebar-nav[aria-label="Support"] {
+  margin-top: 0;
+}
+
 .site-sidebar-link,
 .site-sidebar-profile {
   display: flex;

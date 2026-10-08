@@ -138,7 +138,7 @@
   profileWrap.className = "site-sidebar-profile-wrap";
   const profileLink = document.createElement("a");
   profileLink.className = "site-sidebar-profile";
-  profileLink.href = "login.html";
+  profileLink.href = "profile.html";
   profileLink.setAttribute("aria-label", "Profile");
   const avatar = document.createElement("span");
   avatar.className = "site-sidebar-avatar";

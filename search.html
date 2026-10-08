@@ -11,7 +11,7 @@
     :root {
       --content-offset: 112px;
       --header-top: 24px;
-      --header-height: 134px;
+      --header-height: 160px;
       --header-clearance: 12px;
       scroll-padding-top: calc(var(--header-top) + var(--header-height) + var(--header-clearance));
     }
@@ -39,7 +39,7 @@
       width: calc(100% - var(--content-offset));
       margin-left: var(--content-offset);
       min-height: 100vh;
-      padding: 150px 0 32px;
+      padding: calc(var(--header-top) + var(--header-height)) 0 32px;
     }
 
     .content {
@@ -82,6 +82,14 @@
       margin-bottom:1px;
     }
 
+    .header-logo {
+      display: block;
+      width: min(160px, 100%);
+      height: auto;
+      max-height: 60px;
+      margin: 0 auto;
+    }
+
     .header h4 {
       width: 100%;
       margin: 4px 0 0;
@@ -107,14 +115,12 @@
       overflow-y: hidden;
       padding: 0 4px;
       scroll-behavior: smooth;
-      border: 1px solid #e8d4c8;
-      border-radius: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: #be8282 #f5e6d3;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
     .nav-tabs::-webkit-scrollbar {
-      height: 6px;
+      display: none;
     }
 
     .nav-tabs::-webkit-scrollbar-track {
@@ -758,7 +764,7 @@
       .main-content {
         width: calc(100% - var(--content-offset));
         margin-left: var(--content-offset);
-        padding: 150px 0 24px;
+        padding: calc(var(--header-top) + var(--header-height)) 0 24px;
       }
 
       .header {
@@ -872,7 +878,7 @@
   <main class="main-content">
     <div class="content">
       <div class="header">
-        <h1>NAME</h1>
+        <h1><img class="header-logo" src="logo/sameep-animated.svg" alt="Sameep / समीप"></h1>
         <div class="search-box-container">
           <input type="text" class="search-box" placeholder="Search products..." />
         </div>
@@ -1314,20 +1320,47 @@
 
     document.querySelector(".profile-button").addEventListener("click", (event) => {
       setActiveButton(event.currentTarget);
-      window.location.href = "login.html";
+      window.location.href = "profile.html";
     });
 
-    // Toggle wishlist state for product heart icon
+    function getCardProduct(card) {
+      const priceText = card.querySelector(".price-sale, .price")?.textContent || "";
+      const price = Number(priceText.replace(/[^\d.]/g, ""));
+      return {
+        name: card.querySelector(".card-content h3")?.textContent.trim(),
+        price,
+        image: card.querySelector(".card-image img")?.src || "",
+        brand: card.querySelector(".brand-badge")?.textContent.trim() || "",
+        size: card.querySelector(".product-size")?.textContent.trim() || ""
+      };
+    }
+
+    // Save favorites so they are available from the profile wishlist.
     document.querySelectorAll(".star-icon").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        btn.classList.toggle("active");
+        const card = btn.closest(".card");
+        try {
+          const saved = window.ShopWishlist.toggle(getCardProduct(card));
+          btn.classList.toggle("active", saved);
+          btn.setAttribute("aria-pressed", String(saved));
+        } catch (error) {
+          console.error("Wishlist update failed.", error);
+          window.alert(error.message);
+        }
       });
     });
 
     function showCartError(error) {
       console.error("Shopping cart update failed.", error);
+      window.alert(error.message);
+    }
+
+    try {
+      window.ShopWishlist.syncButtons();
+    } catch (error) {
+      console.error("Unable to restore wishlist state.", error);
       window.alert(error.message);
     }
 

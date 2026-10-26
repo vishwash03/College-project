@@ -230,18 +230,15 @@
           brand: product.brand,
           size: product.size
         });
-        quantityValue.textContent = "1";
+        const savedItem = window.ShopCart.getItems().find((item) => item.name === product.name);
+        const nextQuantity = savedItem ? savedItem.quantity : 1;
+        quantityValue.textContent = String(nextQuantity);
         quantityControl.classList.add("show");
         addButton.classList.add("hidden");
       } else if (button.classList.contains("qty-plus")) {
-        window.ShopCart.add({
-          name: product.name,
-          price: product.price,
-          image: card.querySelector(".card-image img").src,
-          brand: product.brand,
-          size: product.size
-        });
-        quantityValue.textContent = String(currentQuantity + 1);
+        const nextQuantity = currentQuantity + 1;
+        window.ShopCart.setQuantity(product.name, nextQuantity);
+        quantityValue.textContent = String(nextQuantity);
       } else if (button.classList.contains("qty-minus")) {
         const nextQuantity = currentQuantity - 1;
         window.ShopCart.setQuantity(product.name, nextQuantity);

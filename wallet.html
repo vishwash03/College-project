@@ -1071,7 +1071,7 @@
         <header class="wallet-intro">
           <div>
             <h2 id="wallet-title">Wallet</h2>
-            <p>View your balance and add demo funds.</p>
+            <p>View your balance and add funds.</p>
           </div>
         </header>
         <div class="wallet-overview">
@@ -1079,8 +1079,8 @@
             <i data-lucide="wallet-cards"></i>
           </span>
           <div class="wallet-overview-copy">
-            <h3>Wallet balance (demo)</h3>
-            <p>This simulated balance is saved only in this browser.</p>
+            <h3>Wallet balance</h3>
+            <p>This balance is saved only in this browser.</p>
           </div>
           <div class="wallet-overview-balance" id="wallet-balance-display" aria-label="Available wallet balance: zero rupees">
             <span>Available balance</span>
@@ -1091,15 +1091,15 @@
           <div class="wallet-panel-header">
             <div>
               <h3 id="wallet-topup-title">Add money</h3>
-              <p>Choose an amount to add to this demo wallet.</p>
+              <p>Choose an amount to add to your wallet.</p>
             </div>
           </div>
           <div class="wallet-demo-notice">
             <i data-lucide="info" aria-hidden="true"></i>
-            <span>Demo only: this updates the balance saved in this browser. No payment is processed and no real money is added.</span>
+            <span>This updates the balance saved in this browser. No real payment is processed.</span>
           </div>
           <form id="wallet-topup-form" class="wallet-topup-form" novalidate>
-            <div class="wallet-amount-choices" aria-label="Choose a demo amount">
+            <div class="wallet-amount-choices" aria-label="Choose an amount">
               <button class="wallet-amount-choice" type="button" data-wallet-amount="100" aria-pressed="true">₹100</button>
               <button class="wallet-amount-choice" type="button" data-wallet-amount="500" aria-pressed="false">₹500</button>
               <button class="wallet-amount-choice" type="button" data-wallet-amount="1000" aria-pressed="false">₹1,000</button>
@@ -1112,7 +1112,7 @@
             <div>
               <button class="wallet-button" type="submit">
                 <i data-lucide="plus" aria-hidden="true"></i>
-                Add demo money
+                Add money
               </button>
             </div>
             <p id="wallet-topup-status" class="wallet-form-status" role="status" aria-live="polite"></p>
@@ -1196,7 +1196,7 @@
           window.dispatchEvent(new CustomEvent("shop-wallet-balance-updated", {
             detail: { balance: nextBalance }
           }));
-          showStatus(`${formatBalance(amount)} demo money added. No real payment was made.`);
+          showStatus(`${formatBalance(amount)} added to your wallet. No real payment was made.`);
         } catch (error) {
           console.error("Unable to update the demo wallet balance.", error);
           showStatus(error.message || "The demo balance could not be updated.", true);

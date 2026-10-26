@@ -21,30 +21,30 @@
         try {
           storedBalance = localStorage.getItem(balanceKey);
         } catch (error) {
-          console.error("Unable to read the demo wallet balance.", error);
-          throw new Error("The demo balance could not be accessed. Check your browser storage settings.");
+          console.error("Unable to read the wallet balance.", error);
+          throw new Error("The wallet balance could not be accessed. Check your browser storage settings.");
         }
         const balance = storedBalance === null ? 0 : Number(storedBalance);
         if (!Number.isSafeInteger(balance) || balance < 0) {
-          throw new Error("The saved demo balance is invalid.");
+          throw new Error("The saved wallet balance is invalid.");
         }
         profileBalance.textContent = `₹${balance.toLocaleString("en-IN")}`;
-        profileBalanceCard.setAttribute("aria-label", `Demo wallet balance: ${balance} rupees. Add demo money`);
+        profileBalanceCard.setAttribute("aria-label", `Wallet balance: ${balance} rupees. Add money`);
       };
       try {
         renderBalance();
       } catch (error) {
-        console.error("Unable to load the demo wallet balance.", error);
+        console.error("Unable to load the wallet balance.", error);
         profileBalance.textContent = "Unavailable";
-        profileBalanceCard.setAttribute("aria-label", "Demo wallet balance unavailable. Open wallet to review.");
+        profileBalanceCard.setAttribute("aria-label", "Wallet balance unavailable. Open wallet to review.");
       }
       const refreshBalance = () => {
         try {
           renderBalance();
         } catch (error) {
-          console.error("Unable to refresh the demo wallet balance.", error);
+          console.error("Unable to refresh the wallet balance.", error);
           profileBalance.textContent = "Unavailable";
-          profileBalanceCard.setAttribute("aria-label", "Demo wallet balance unavailable. Open wallet to review.");
+          profileBalanceCard.setAttribute("aria-label", "Wallet balance unavailable. Open wallet to review.");
         }
       };
       window.addEventListener("storage", (event) => {
@@ -322,7 +322,7 @@
       empty.append(
         icon,
         element("h2", "", "No orders yet"),
-        element("p", "", "Your orders will show up here once you place a demo order."),
+        element("p", "", "Your orders will show up here once you place an order."),
       );
       const shopLink = element("a", "account-button", "Start shopping");
       shopLink.href = "index.html";
@@ -337,9 +337,9 @@
       heading.append(element("span", "account-badge", window.ShopOrders.statuses[order.statusIndex]));
       const date = new Date(order.createdAt);
       const description = element("p", "account-list-copy",
-        `${date.toLocaleDateString("en-IN")} · ${order.items.length} ${order.items.length === 1 ? "item" : "items"} · ₹${order.total.toLocaleString("en-IN")} (demo)`);
+        `${date.toLocaleDateString("en-IN")} · ${order.items.length} ${order.items.length === 1 ? "item" : "items"} · ₹${order.total.toLocaleString("en-IN")}`);
       const actions = element("div", "account-list-actions");
-      const trackingLink = element("a", "account-button", "Track demo order");
+      const trackingLink = element("a", "account-button", "Track order");
       trackingLink.href = `order-tracking.html?id=${encodeURIComponent(order.id)}`;
       actions.append(trackingLink);
       card.append(heading, description, actions);
@@ -456,7 +456,7 @@
             <button class="account-button" type="submit">Save payment method</button>
           </div>
         </form>
-        <p class="account-list-copy">For your security, do not enter or store a full card number, CVV, or PIN on this demo page.</p>
+        <p class="account-list-copy">For your security, do not enter or store a full card number, CVV, or PIN on this page.</p>
       </section>
       <section class="account-card">
         <h2>Saved payment methods</h2>

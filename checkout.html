@@ -47,6 +47,24 @@
       border: 1px solid var(--border); border-radius: 9px; font: inherit; font-size: 14px;
     }
     .checkout-field textarea { min-height: 76px; resize: vertical; }
+    .checkout-saved-address {
+      padding: 14px;
+      background: #fffaf6;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .checkout-saved-address p { margin: 0 0 10px; color: var(--ink); font-size: 13px; line-height: 1.6; white-space: pre-line; }
+    .checkout-address-change {
+      padding: 0;
+      color: var(--accent);
+      background: none;
+      border: 0;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .checkout-address-change:hover { text-decoration: underline; }
     .checkout-field input:focus, .checkout-field select:focus, .checkout-field textarea:focus {
       border-color: var(--accent); outline: 2px solid rgba(160,99,107,.16);
     }
@@ -91,7 +109,7 @@
       <h1>Checkout</h1>
     </header>
     <p class="checkout-intro">Confirm your delivery details and review your order.</p>
-    <div class="checkout-notice" role="note">Demo checkout: orders are saved in this browser only. No payment is collected and no real order is sent to a store.</div>
+    <div class="checkout-notice" role="note">Checkout: orders are saved in this browser only. No payment is collected and no real order is sent to a store.</div>
     <div id="checkout-error" class="checkout-error" role="alert" hidden></div>
     <div id="checkout-empty" class="checkout-empty" hidden>
       <h2>Your cart is empty</h2>
@@ -106,7 +124,11 @@
             <label for="saved-address">Use a saved address</label>
             <select id="saved-address"><option value="">Enter a new address</option></select>
           </div>
-          <div class="checkout-form">
+          <div id="saved-address-summary" class="checkout-saved-address" hidden>
+            <p id="saved-address-copy"></p>
+            <button id="change-address" class="checkout-address-change" type="button">Change address</button>
+          </div>
+          <div id="delivery-fields" class="checkout-form">
             <div class="checkout-field checkout-field-wide">
               <label for="delivery-name">Full name</label>
               <input id="delivery-name" name="name" autocomplete="name" maxlength="80" required>
@@ -138,10 +160,12 @@
           <div class="checkout-field">
             <label for="payment-method">Payment method</label>
             <select id="payment-method" name="payment">
-              <option value="Cash on delivery (demo)">Cash on delivery (demo)</option>
+              <option value="Cash on delivery">Cash on delivery</option>
+              <option value="Wallet">Wallet</option>
             </select>
           </div>
-          <p class="checkout-terms">This demo does not collect payment details or process a transaction.</p>
+          <p id="payment-wallet-note" class="checkout-terms">Wallet balance: ₹0</p>
+          <p class="checkout-terms">This checkout does not collect payment details or process a real transaction.</p>
         </section>
       </form>
       <aside class="checkout-summary checkout-card" aria-labelledby="summary-heading">
@@ -150,7 +174,7 @@
         <div class="checkout-total-row"><span>Subtotal</span><strong id="checkout-subtotal"></strong></div>
         <div class="checkout-total-row"><span>Delivery</span><strong id="checkout-delivery"></strong></div>
         <div class="checkout-total-row checkout-grand-total"><span>Total</span><strong id="checkout-total"></strong></div>
-        <button id="place-order" class="checkout-button" type="submit" form="checkout-form"><i data-lucide="package-check" aria-hidden="true"></i>Place demo order</button>
+        <button id="place-order" class="checkout-button" type="submit" form="checkout-form"><i data-lucide="package-check" aria-hidden="true"></i>Place order</button>
         <p class="checkout-terms">No real payment or order submission occurs.</p>
       </aside>
     </div>
@@ -162,11 +186,34 @@
       const form = document.getElementById("checkout-form");
       const error = document.getElementById("checkout-error");
       const subtotalElement = document.getElementById("checkout-subtotal");
+      const paymentMethod = document.getElementById("payment-method");
+      const paymentWalletNote = document.getElementById("payment-wallet-note");
       let cartItems = [];
       let subtotal = 0;
       const formatPrice = (amount) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(amount);
       const savedAddressField = document.getElementById("saved-address-field");
       const savedAddressSelect = document.getElementById("saved-address");
+      const savedAddressSummary = document.getElementById("saved-address-summary");
+      const savedAddressCopy = document.getElementById("saved-address-copy");
+      const deliveryFields = document.getElementById("delivery-fields");
+      const changeAddressButton = document.getElementById("change-address");
+
+      function readWalletBalance() {
+        const savedBalance = localStorage.getItem("shop-wallet-balance");
+        if (savedBalance === null || savedBalance === "") return 0;
+        const balance = Number(savedBalance);
+        if (!Number.isFinite(balance) || balance < 0) return 0;
+        return balance;
+      }
+
+      function writeWalletBalance(balance) {
+        localStorage.setItem("shop-wallet-balance", String(Math.max(0, Number(balance) || 0)));
+      }
+
+      function renderWalletPaymentNote() {
+        const walletBalance = readWalletBalance();
+        paymentWalletNote.textContent = `Wallet balance: ${formatPrice(walletBalance)}`;
+      }
 
       function loadSavedAddresses() {
         let serialized;
@@ -190,6 +237,41 @@
         ["name", "phone", "line", "city", "state", "postal"].forEach((field) => {
           form.elements[field].value = address?.[field] || "";
         });
+      }
+
+      function showSavedAddress(address) {
+        setAddress(address);
+        savedAddressCopy.textContent = `${address.name}\n${address.line}\n${address.city}, ${address.state} ${address.postal}\n${address.phone}`;
+        savedAddressSummary.hidden = false;
+        deliveryFields.hidden = true;
+        savedAddressField.hidden = true;
+      }
+
+      function saveDefaultAddress(address) {
+        const key = "quickcart-saved-addresses";
+        const addresses = loadSavedAddresses();
+        const existing = addresses.find((saved) =>
+          saved.phone === address.phone &&
+          saved.line === address.line &&
+          saved.postal === address.postal
+        );
+        addresses.forEach((saved) => { saved.default = false; });
+        if (existing) {
+          Object.assign(existing, address, { default: true });
+        } else {
+          addresses.push({
+            ...address,
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            type: "Home",
+            default: true
+          });
+        }
+        try {
+          localStorage.setItem(key, JSON.stringify(addresses));
+        } catch (storageError) {
+          console.error("Unable to save the delivery address for future checkouts.", storageError);
+          throw new Error("Your delivery address could not be saved. Check your browser storage settings and try again.");
+        }
       }
 
       function showError(message) {
@@ -231,6 +313,8 @@
         document.getElementById("checkout-delivery").textContent = delivery ? formatPrice(delivery) : "Free";
         document.getElementById("checkout-total").textContent = formatPrice(subtotal + delivery);
 
+        renderWalletPaymentNote();
+
         const addresses = loadSavedAddresses();
         if (addresses.length) {
           savedAddressField.hidden = false;
@@ -242,7 +326,7 @@
           });
           const preferredAddress = Math.max(0, addresses.findIndex((address) => address.default));
           savedAddressSelect.value = String(preferredAddress);
-          setAddress(addresses[preferredAddress]);
+          showSavedAddress(addresses[preferredAddress]);
         }
       } catch (loadError) {
         console.error("Unable to prepare checkout.", loadError);
@@ -253,10 +337,23 @@
         try {
           const addresses = loadSavedAddresses();
           const selected = savedAddressSelect.value;
-          setAddress(selected === "" ? null : addresses[Number(selected)]);
+          if (selected === "") {
+            setAddress(null);
+            savedAddressSummary.hidden = true;
+            deliveryFields.hidden = false;
+          } else {
+            showSavedAddress(addresses[Number(selected)]);
+          }
         } catch (loadError) {
           showError(loadError.message);
         }
+      });
+
+      changeAddressButton.addEventListener("click", () => {
+        savedAddressSummary.hidden = true;
+        savedAddressField.hidden = false;
+        deliveryFields.hidden = false;
+        savedAddressSelect.focus();
       });
 
       form.addEventListener("submit", (event) => {
@@ -280,19 +377,32 @@
             postal
           };
           if (Object.values(address).some((value) => !value)) throw new Error("Complete all delivery details.");
+
+          const selectedPayment = form.elements.payment.value;
+          const total = subtotal + delivery;
+          let walletBalance;
+          if (selectedPayment === "Wallet") {
+            walletBalance = readWalletBalance();
+            if (walletBalance < total) {
+              throw new Error(`Wallet balance is insufficient. Available balance: ${formatPrice(walletBalance)}.`);
+            }
+          }
+
+          saveDefaultAddress(address);
+          if (selectedPayment === "Wallet") writeWalletBalance(walletBalance - total);
           const order = ShopOrders.create({
             items: cartItems.map(({ name, price, quantity, image, brand, size }) => ({ name, price, quantity, image, brand, size })),
             subtotal,
             delivery,
-            total: subtotal + delivery,
+            total,
             address,
-            payment: form.elements.payment.value
+            payment: selectedPayment
           });
           ShopCart.clear();
           window.location.href = `order-tracking.html?id=${encodeURIComponent(order.id)}`;
         } catch (submitError) {
-          console.error("Unable to place demo order.", submitError);
-          showError(submitError.message || "Your demo order could not be placed.");
+          console.error("Unable to place order.", submitError);
+          showError(submitError.message || "Your order could not be placed.");
         }
       });
       window.lucide?.createIcons();

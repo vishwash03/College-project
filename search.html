@@ -1390,7 +1390,10 @@
             brand: card.querySelector(".brand-badge").textContent.trim(),
             size: card.querySelector(".product-size").textContent.trim()
           });
-          qtyDisplay.textContent = "1";
+
+          const savedItem = ShopCart.getItems().find((item) => item.name === name);
+          const nextQuantity = savedItem ? savedItem.quantity : 1;
+          qtyDisplay.textContent = String(nextQuantity);
           qtyControl.classList.add("show");
           addToCartBtn.classList.add("hidden");
         } catch (error) {
@@ -1402,14 +1405,15 @@
         e.preventDefault();
         e.stopPropagation();
         try {
-          const quantity = Number(qtyDisplay.textContent) - 1;
-          ShopCart.setQuantity(name, quantity);
-          if (quantity < 1) {
-          qtyControl.classList.remove("show");
-          addToCartBtn.classList.remove("hidden");
-          qtyDisplay.textContent = "1";
+          const currentQuantity = Number(qtyDisplay.textContent) || 0;
+          const nextQuantity = currentQuantity - 1;
+          ShopCart.setQuantity(name, nextQuantity);
+          if (nextQuantity < 1) {
+            qtyControl.classList.remove("show");
+            addToCartBtn.classList.remove("hidden");
+            qtyDisplay.textContent = "1";
           } else {
-            qtyDisplay.textContent = String(quantity);
+            qtyDisplay.textContent = String(nextQuantity);
           }
         } catch (error) {
           showCartError(error);
@@ -1420,9 +1424,10 @@
         e.preventDefault();
         e.stopPropagation();
         try {
-          const quantity = Number(qtyDisplay.textContent) + 1;
-          ShopCart.setQuantity(name, quantity);
-          qtyDisplay.textContent = String(quantity);
+          const currentQuantity = Number(qtyDisplay.textContent) || 0;
+          const nextQuantity = currentQuantity + 1;
+          ShopCart.setQuantity(name, nextQuantity);
+          qtyDisplay.textContent = String(nextQuantity);
         } catch (error) {
           showCartError(error);
         }

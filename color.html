@@ -254,17 +254,27 @@
       try {
         const quantity = Number(quantityDisplay.textContent);
         if (button.classList.contains("add-to-cart") || button.classList.contains("qty-plus")) {
-          window.ShopCart.add({
-            name: productName,
-            price: 400,
-            image: card.querySelector(".card-image img").src,
-            brand: "TrendStyle",
-            size: "200ml / Piece"
-          });
-          quantityDisplay.textContent = String(button.classList.contains("add-to-cart") ? 1 : quantity + 1);
+          if (button.classList.contains("add-to-cart")) {
+            window.ShopCart.add({
+              name: productName,
+              price: 400,
+              image: card.querySelector(".card-image img").src,
+              brand: "TrendStyle",
+              size: "200ml / Piece"
+            });
+          }
+
+          const nextQuantity = button.classList.contains("add-to-cart")
+            ? (window.ShopCart.getItems().find((item) => item.name === productName)?.quantity ?? 1)
+            : quantity + 1;
+
           if (button.classList.contains("add-to-cart")) {
             quantityControl.classList.add("show");
             addButton.classList.add("hidden");
+          }
+          quantityDisplay.textContent = String(nextQuantity);
+          if (button.classList.contains("qty-plus")) {
+            window.ShopCart.setQuantity(productName, nextQuantity);
           }
         } else if (button.classList.contains("qty-minus")) {
           const nextQuantity = quantity - 1;
